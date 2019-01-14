@@ -1,0 +1,41 @@
+/*==========================*Main MENU*=========================*/
+
+.menu-item .label {
+    -fx-padding: 0 10px 0 10px;
+}
+
+/*==========================*PopUPs, Dialog Boxes*=========================*/
+
+#contextMenu, #popUp1, #addHousePopUp, #dialogBox {
+    -fx-background-color: #eeeeee;
+    -fx-spacing: 5;
+    -fx-opacity: 0.95;
+    -fx-border-color: #dedede;
+    -fx-border-style: solid inside;  
+    -fx-border-width: 2; 
+}
+
+/*==========================*Buttons*=========================*/
+.button {
+    -fx-pref-height: 30;
+    -fx-background-color: #cccccc;
+}
+
+
+/*#contextMenu .button {
+    -fx-pref-width: 200;
+}*/
+ 
+.button:hover {
+    -fx-background-color: #3b8fff;
+/*    -fx-padding: 10; 
+    -fx-border-style: solid inside;  
+    -fx-border-width: 2;  */
+/*    -fx-border-insets: 5;  
+    -fx-border-radius: 5;  */
+/*-fx-border-color: #545454;*/
+    -fx-text-fill: #ffffff;
+}
+
+
+ 
