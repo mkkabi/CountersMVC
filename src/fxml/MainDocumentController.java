@@ -19,11 +19,9 @@ public class MainDocumentController {
 	@FXML
 	private MenuItem addHouseMenuItem;
 	@FXML
-	ImageView closeAddHousePopUp;
+	private Button saveHousehold, closeAddHousePopUp;
 	@FXML
-	private Button saveHousehold;
-	@FXML
-	private AnchorPane addHousePopUp;
+	private AnchorPane addHousePopUp, mainPane;
 	@FXML
 	private TextField newHouseholdName;
 	@FXML
@@ -63,8 +61,8 @@ public class MainDocumentController {
 	}
 	@FXML
 	public void openHouseholdPopUp() {
-		addHousePopUp.setLayoutX(730 / 2 - addHousePopUp.getWidth() / 2);
-		addHousePopUp.setLayoutY((460 / 2 - addHousePopUp.getHeight() / 2));
+		addHousePopUp.setLayoutX(mainPane.getWidth() / 2 - addHousePopUp.getWidth() / 2);
+		addHousePopUp.setLayoutY((mainPane.getHeight() / 2 - addHousePopUp.getHeight() / 2));
 		addHousePopUp.setVisible(true);
 	}
 }

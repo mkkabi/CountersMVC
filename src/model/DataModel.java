@@ -39,8 +39,8 @@ public class DataModel {
 //			}
 //		}
 	}
-
-	public void loadTab(TabPane tabs, String s) {
+	
+	public void saveNewTab(TabPane tabs, String s) {
 		Tab tab;
 		application.Serializer<Household> ser = new application.Serializer();
 		households.add(new Household(s));
@@ -55,14 +55,30 @@ public class DataModel {
 			System.out.println(ex.toString());
 		}
 	}
-
-	public void createTabDynamically(TabPane tabs) {
+	
+	
+	public void loadTabsFromSave(TabPane tabs){
 		application.Serializer ser = new application.Serializer<>();
 
-//		try {
-//			ser.restoreObjects("houses.ser", Household.households, t -> addTab(tabs, (Household) t));
-//		} catch (FileNotFoundException ex) {
-//			System.out.println(ex.toString());
-//		}
+		try {
+			ser.restoreObjects(Household.SAVE_FILE, households, t -> addTab(tabs, (Household) t));
+		} catch (FileNotFoundException ex) {
+			System.out.println(ex.toString());
+		}
 	}
+	
+
+	public Tab createNewTab(String s) {
+		FXMLLoader tabLoader = new FXMLLoader(getClass().getResource("/fxml/tab.fxml"));
+		try {
+			TabController mainDocumentController = tabLoader.getController();
+			Tab tab =  new Tab(s);
+			tab.setContent(tabLoader.load());
+			return tab;
+		} catch (IOException ex) {
+			System.out.println(ex.toString());
+		}
+		return null;
+	}
+
 }

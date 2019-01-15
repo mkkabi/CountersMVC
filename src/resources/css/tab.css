@@ -3,6 +3,7 @@
 .menu-item .label {
     -fx-padding: 0 10px 0 10px;
 }
+/*END=======================*Main MENU*=========================*/
 
 /*==========================*PopUPs, Dialog Boxes*=========================*/
 
@@ -15,7 +16,18 @@
     -fx-border-width: 2; 
 }
 
+#dialogBox{
+    -fx-max-height: 10;
+}
+/*END=======================*PopUPs, Dialog Boxes*=========================*/
+
 /*==========================*Buttons*=========================*/
+#closeAddHousePopUp{
+    -fx-pref-height: 20;
+    -fx-pref-width: 20;
+
+}
+ 
 .button {
     -fx-pref-height: 30;
     -fx-background-color: #cccccc;
@@ -37,5 +49,6 @@
     -fx-text-fill: #ffffff;
 }
 
+/*END=======================*Buttons*=========================*/
 
  

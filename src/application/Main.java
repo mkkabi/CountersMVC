@@ -1,8 +1,8 @@
-
 package application;
 
 import fxml.MainDocumentController;
 import fxml.TabController;
+import java.io.IOException;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -13,29 +13,36 @@ import model.DataModel;
 
 public class Main extends Application {
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+	private AnchorPane root;
 
-        AnchorPane root = new AnchorPane();
-		  
-        FXMLLoader mainDocumentLoader = new FXMLLoader(getClass().getResource("/fxml/mainDocument.fxml"));
-        root.getChildren().add(mainDocumentLoader.load());
-        MainDocumentController mainDocumentController = mainDocumentLoader.getController();
-		  
-//FXMLLoader mainDocumentLoader = new FXMLLoader(getClass().getResource("/fxml/tab.fxml"));
-//        root.getChildren().add(mainDocumentLoader.load());
-//        TabController mainDocumentController = mainDocumentLoader.getController();
-		  
- 
-        DataModel model = new DataModel();
-        mainDocumentController.initModel(model);
- 
+	@Override
+	public void start(Stage primaryStage) throws Exception {
 
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-    
-    // annoying Eclipse launch workaround:
-    public static void main(String[] args) { launch(args); }
+		FXMLLoader mainDocumentLoader = new FXMLLoader();
+		mainDocumentLoader.setLocation(getClass().getResource("/fxml/mainDocument.fxml"));
+		root = mainDocumentLoader.load();
+		MainDocumentController mainDocumentController = mainDocumentLoader.getController();
+
+//				FXMLLoader loader = new FXMLLoader();
+//		loader.setLocation(getClass().getResource("/fxml/mainDocument.fxml"));
+//		MainDocumentController mainDocumentController = new MainDocumentController();
+//		loader.setController(mainDocumentController);
+//		try {
+//			root = loader.load();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		
+		DataModel model = new DataModel();
+		mainDocumentController.initModel(model);
+
+		Scene scene = new Scene(root);
+		primaryStage.setScene(scene);
+		primaryStage.show();
+	}
+
+	// annoying Eclipse launch workaround:
+	public static void main(String[] args) {
+		launch(args);
+	}
 }
