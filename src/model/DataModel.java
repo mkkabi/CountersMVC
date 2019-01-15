@@ -2,9 +2,12 @@ package model;
 
 import fxml.MainDocumentController;
 import fxml.TabController;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.Observable;
@@ -19,27 +22,47 @@ import javafx.scene.layout.AnchorPane;
 
 public class DataModel {
 
-//	 ObservableList<Tab> tabList = FXCollections.observableArrayList(person -> 
-//        new Observable[] {});
-	List<Tab> tabList = new ArrayList();
+	private static Set<Household> households = new LinkedHashSet();
+	private static Counter currentCounter;
 
 	public void loadTab(TabPane tabs) {
-		tabList.parallelStream().forEach(t -> tabs.getTabs().add(t));
+//		Tab tab;
+//		for (int i = 0; i < 3; i++) {
+//			FXMLLoader tabLoader = new FXMLLoader(getClass().getResource("/fxml/tab.fxml"));
+//			try {
+//				tab = new Tab("" + i);
+//				tab.setContent(tabLoader.load());
+//				tabs.getTabs().add(tab);
+//				TabController mainDocumentController = tabLoader.getController();
+//			} catch (IOException ex) {
+//				System.out.println(ex.toString());
+//			}
+//		}
 	}
 
-	
-	{
-		for (int i = 0; i < 3; i++) {
-			FXMLLoader tabLoader = new FXMLLoader(getClass().getResource("/fxml/tab.fxml"));
-			try {
-				Tab tab = new Tab("tab name " + i);
-				tab.setContent(tabLoader.load());
-				tabList.add(tab);
-				TabController mainDocumentController = tabLoader.getController();
-			} catch (IOException ex) {
-			}
+	public void loadTab(TabPane tabs, String s) {
+		Tab tab;
+		application.Serializer<Household> ser = new application.Serializer();
+		households.add(new Household(s));
+		ser.saveObjects(model.Household.SAVE_FILE, households);
+		FXMLLoader tabLoader = new FXMLLoader(getClass().getResource("/fxml/tab.fxml"));
+		try {
+			tab = new Tab(s);
+			tab.setContent(tabLoader.load());
+			tabs.getTabs().add(tab);
+			TabController mainDocumentController = tabLoader.getController();
+		} catch (IOException ex) {
+			System.out.println(ex.toString());
 		}
 	}
 
-	
+	public void createTabDynamically(TabPane tabs) {
+		application.Serializer ser = new application.Serializer<>();
+
+//		try {
+//			ser.restoreObjects("houses.ser", Household.households, t -> addTab(tabs, (Household) t));
+//		} catch (FileNotFoundException ex) {
+//			System.out.println(ex.toString());
+//		}
+	}
 }

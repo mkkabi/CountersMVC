@@ -8,13 +8,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="730.0" stylesheets="@../resources/css/tab.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.MainDocumentController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" onContextMenuRequested="#openHouseholdPopUp" prefHeight="470.0" prefWidth="730.0" stylesheets="@../resources/css/tab.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.MainDocumentController">
    <children>
       <MenuBar minWidth="-Infinity" prefHeight="25.0" prefWidth="730.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="Menu">
             <items>
-              <MenuItem fx:id="newHousehold" mnemonicParsing="false" text="add new Household" />
+              <MenuItem fx:id="addHouseMenuItem" mnemonicParsing="false" onAction="#openHouseholdPopUp" text="add new Household" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="File">
@@ -36,6 +36,17 @@
                <font>
                   <Font size="13.0" />
                </font></Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="addHousePopUp" prefHeight="304.0" prefWidth="180.0">
+         <children>
+            <Button fx:id="saveHousehold" layoutX="59.0" layoutY="260.0" mnemonicParsing="false" onAction="#saveHousehold" text="Save" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+            <TextField fx:id="newHouseholdName" layoutX="15.0" layoutY="14.0" promptText="Name" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="26.0" />
+            <ImageView fx:id="closeAddHousePopUp" fitHeight="20.0" fitWidth="20.0" layoutX="66.0" layoutY="-61.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+               <image>
+                  <Image url="/resources/images/close.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </children>

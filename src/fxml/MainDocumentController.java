@@ -12,48 +12,59 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import model.DataModel;
+import model.Household;
 
-/**
- * FXML Controller class
- *
- * @author qwe
- */
 public class MainDocumentController {
 
 	@FXML
-	private MenuItem newHousehold;
+	private MenuItem addHouseMenuItem;
 	@FXML
-	private MenuItem about;
-	@FXML
-	private TabPane tabs;
-	@FXML
-	private AnchorPane addHousePopUp;
+	ImageView closeAddHousePopUp;
 	@FXML
 	private Button saveHousehold;
 	@FXML
+	private AnchorPane addHousePopUp;
+	@FXML
 	private TextField newHouseholdName;
 	@FXML
-	private ImageView closeAddHousePopUp;
-	@FXML
-	private AnchorPane dialogBox;
-	@FXML
-	private Label infoLabel;
+	private TabPane tabs;
 
 	private DataModel model;
-	private String name;
-	
+
 	public void initModel(DataModel model) {
-        if (this.model != null) {
-           // throw new IllegalStateException("Model can only be initialized once");
-			  System.out.println("Model is no NULL");
-        }
-        this.model = model;
-		  
-		  model.loadTab(tabs);
-    }
-	
-	public void setName(){
-		this.name = "name name";
-		System.out.println("name set");
+		if (this.model != null) {
+			System.out.println("Model is no NULL");
+			throw new IllegalStateException("Model can only be initialized once");
+		}
+
+		this.model = model;
+		model.loadTab(tabs);
+
+		/*== Add Household popUP ==*/
+ /*
+		@Todo
+		need to set popUp window layout dynamically
+		 */
+		addHousePopUp.setVisible(false);
+		closeAddHousePopUp.setOnMouseClicked(t -> addHousePopUp.setVisible(false));
+
+
+	}
+
+	@FXML
+	public void saveHousehold(){
+		if (newHouseholdName.getText().length() > 2) {
+				model.loadTab(tabs, newHouseholdName.getText());
+				addHousePopUp.setVisible(false);
+			} else {
+				// info message pop up
+				System.out.println("enter household name");
+			}
+	}
+	@FXML
+	public void openHouseholdPopUp() {
+		addHousePopUp.setLayoutX(730 / 2 - addHousePopUp.getWidth() / 2);
+		addHousePopUp.setLayoutY((460 / 2 - addHousePopUp.getHeight() / 2));
+		addHousePopUp.setVisible(true);
 	}
 }

@@ -35,7 +35,7 @@
                   <TextArea fx:id="counterData" layoutX="293.0" layoutY="1.0" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="250.0" promptText="Choose counter for calculation history" wrapText="true" AnchorPane.bottomAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0" />
                   <ImageView fx:id="deleteImage" fitHeight="25.0" fitWidth="25.0" layoutX="229.0" layoutY="375.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="232.0">
                      <image>
-                        <Image url="/resources/images/trash_l2.png" />
+                        <Image url="/resources/images/trash_l.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="307.0" layoutY="250.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
