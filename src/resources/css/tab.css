@@ -19,13 +19,21 @@
 #dialogBox{
     -fx-max-height: 10;
 }
+
+/*#addHousePopUp .label, #addHousePopUp checkbox {
+    -fx-margin-top: 15;
+    -fx-vgap: 15;
+    -fx-min-height: 30;
+    -fx-padding: 30;
+}*/
 /*END=======================*PopUPs, Dialog Boxes*=========================*/
 
 /*==========================*Buttons*=========================*/
 #closeAddHousePopUp{
-    -fx-pref-height: 20;
+    -fx-pref-height: 16;
+    -fx-min-height: 16;
     -fx-pref-width: 20;
-
+ 
 }
  
 .button {

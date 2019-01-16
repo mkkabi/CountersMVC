@@ -8,19 +8,21 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<!--fx:controller="fxml.TabController"-->
+
 <AnchorPane fx:id="tabAnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="407.0" prefWidth="730.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <SplitPane dividerPositions="0.29797979797979796" layoutX="1.0" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="407.0" prefWidth="730.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="1.0">
          <items>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="220.0">
                <children>
-                  <ListView fx:id="list_todo" editable="true" layoutX="1.0" layoutY="42.0" prefHeight="364.0" prefWidth="212.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="42.0" />
-                  <ImageView fx:id="editTabImage" fitHeight="25.0" fitWidth="25.0" layoutX="7.0" layoutY="255.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0">
+                  <ListView fx:id="list_todo" editable="true" layoutX="1.0" layoutY="42.0" onContextMenuRequested="#openContextMenu" prefHeight="364.0" prefWidth="212.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="42.0" />
+                  <ImageView fx:id="editTabImage" fitHeight="25.0" fitWidth="25.0" layoutX="7.0" layoutY="255.0" onMouseClicked="#openContextMenu" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0">
                      <image>
                         <Image url="/resources/images/edit.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="tabName" alignment="CENTER" contentDisplay="CENTER" layoutX="1.0" layoutY="7.0" prefHeight="17.0" prefWidth="212.0" text="Household Name" textAlignment="CENTER" textFill="#3b8fff" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="7.0">
+                  <Label fx:id="tabName" alignment="CENTER" contentDisplay="CENTER" layoutX="1.0" layoutY="12.0" prefHeight="17.0" prefWidth="212.0" text="Household Name" textAlignment="CENTER" textFill="#3b8fff" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="12.0">
                      <font>
                         <Font name="Arial Black" size="18.0" />
                      </font>
@@ -33,7 +35,7 @@
                   <TextField layoutX="14.0" layoutY="58.0" maxHeight="-Infinity" prefHeight="25.0" prefWidth="227.0" promptText="Previous" AnchorPane.leftAnchor="14.0" />
                   <Button layoutX="14.0" layoutY="95.0" maxHeight="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="227.0" text="Calculate" AnchorPane.leftAnchor="14.0" />
                   <TextArea fx:id="counterData" layoutX="293.0" layoutY="1.0" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="250.0" promptText="Choose counter for calculation history" wrapText="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="257.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0" />
-                  <ImageView fx:id="deleteImage" fitHeight="25.0" fitWidth="25.0" layoutX="229.0" layoutY="375.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="232.0">
+                  <ImageView fx:id="deleteImage" fitHeight="25.0" fitWidth="25.0" layoutX="229.0" layoutY="375.0" onMouseClicked="#deleteTab" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="232.0">
                      <image>
                         <Image url="/resources/images/trash_l.png" />
                      </image>
@@ -47,15 +49,6 @@
             </AnchorPane>
          </items>
       </SplitPane>
-      <VBox fx:id="contextMenu" prefHeight="200.0" prefWidth="212.0" AnchorPane.bottomAnchor="-200.0" AnchorPane.leftAnchor="-200.0">
-         <children>
-            <Button fx:id="openPopUp" mnemonicParsing="false" prefWidth="212.0" text="Button">
-               <VBox.margin>
-                  <Insets bottom="5.0" />
-               </VBox.margin></Button>
-            <Button fx:id="closeConetxtMenu" mnemonicParsing="false" prefHeight="25.0" prefWidth="212.0" text="Close" />
-         </children>
-      </VBox>
       <AnchorPane fx:id="popUp1" disable="true" prefHeight="350.0" prefWidth="180.0" visible="false">
          <children>
             <Button layoutX="4.0" layoutY="161.0" mnemonicParsing="false" prefWidth="194.0" text="Button" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
@@ -66,5 +59,15 @@
             <ChoiceBox layoutX="13.0" layoutY="165.0" prefWidth="150.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
          </children>
       </AnchorPane>
+      <VBox fx:id="contextMenu" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="-200.0" AnchorPane.leftAnchor="-200.0">
+         <children>
+            <Button mnemonicParsing="false" onMouseClicked="#deleteTab" prefWidth="212.0" text="Delete this House">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="closeConetxtMenu" mnemonicParsing="false" onMouseClicked="#closeContextMenu" prefHeight="25.0" prefWidth="212.0" text="Close" />
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

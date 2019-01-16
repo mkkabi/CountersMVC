@@ -1,84 +1,78 @@
 package model;
 
-import fxml.MainDocumentController;
 import fxml.TabController;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.beans.Observable;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.AnchorPane;
 
 public class DataModel {
 
-	private static Set<Household> households = new LinkedHashSet();
+	private static final Set<Household> households = new LinkedHashSet();
 	private static Counter currentCounter;
+	application.Serializer<Household> ser = new application.Serializer();
 
-	public void loadTab(TabPane tabs) {
-//		Tab tab;
-//		for (int i = 0; i < 3; i++) {
-//			FXMLLoader tabLoader = new FXMLLoader(getClass().getResource("/fxml/tab.fxml"));
-//			try {
-//				tab = new Tab("" + i);
-//				tab.setContent(tabLoader.load());
-//				tabs.getTabs().add(tab);
-//				TabController mainDocumentController = tabLoader.getController();
-//			} catch (IOException ex) {
-//				System.out.println(ex.toString());
-//			}
-//		}
-	}
-	
-	public void saveNewTab(TabPane tabs, String s) {
-		Tab tab;
-		application.Serializer<Household> ser = new application.Serializer();
-		households.add(new Household(s));
+	public void addTab(TabPane tabPane, String s) {
+		Household h = new Household(s);
+		households.add(h);
 		ser.saveObjects(model.Household.SAVE_FILE, households);
-		FXMLLoader tabLoader = new FXMLLoader(getClass().getResource("/fxml/tab.fxml"));
+		loadTab(tabPane, h);
+	}
+
+	
+ 
+ //		loader.setController(tabController);
+ //		try {
+//			tabController = loader.load();
+//			householdTab.setContent(tabController);
+//			tabPane.getTabs().add(householdTab);
+//		} catch (IOException e) {
+//			System.out.println(e.toString()
+//		}
+//	}
+	public void loadTab(TabPane tabPane, Household hh) {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("/fxml/tab.fxml"));
+		TabController tabController = new TabController(hh);
+		tabController.initModel(this);
+		loader.setController(tabController);
+		tabController.setText(hh.getName());
 		try {
-			tab = new Tab(s);
-			tab.setContent(tabLoader.load());
-			tabs.getTabs().add(tab);
-			TabController mainDocumentController = tabLoader.getController();
-		} catch (IOException ex) {
-			System.out.println(ex.toString());
+ 			tabController.setContent(loader.load());
+			tabPane.getTabs().add(tabController);
+		} catch (IOException e) {System.out.println(e.toString());
+		}
+	}
+
+	public void restoreTabFromSave(TabPane tabPane) {
+		try {
+			ser.restoreObjects(Household.SAVE_FILE, households, t -> loadTab(tabPane, (Household) t));
+		} catch (FileNotFoundException f) {
+			System.out.println(f.toString());
 		}
 	}
 	
-	
-	public void loadTabsFromSave(TabPane tabs){
-		application.Serializer ser = new application.Serializer<>();
-
-		try {
-			ser.restoreObjects(Household.SAVE_FILE, households, t -> addTab(tabs, (Household) t));
-		} catch (FileNotFoundException ex) {
-			System.out.println(ex.toString());
-		}
-	}
-	
-
-	public Tab createNewTab(String s) {
-		FXMLLoader tabLoader = new FXMLLoader(getClass().getResource("/fxml/tab.fxml"));
-		try {
-			TabController mainDocumentController = tabLoader.getController();
-			Tab tab =  new Tab(s);
-			tab.setContent(tabLoader.load());
-			return tab;
-		} catch (IOException ex) {
-			System.out.println(ex.toString());
-		}
-		return null;
+	public void removeHousehold(Household house){
+		households.remove(house);
+		ser.saveObjects(model.Household.SAVE_FILE, households);
 	}
 
+//	public void loadTab(TabPane tabPane, Household h) {
+//
+//		FXMLLoader loader = new FXMLLoader();
+//		loader.setLocation(getClass().getResource("/fxml/tab.fxml"));
+//		TabController tabController = new TabController(h);
+//		loader.setController(tabController);
+//		Tab householdTab = new Tab(h.getName());
+//		try {
+//			tabController = loader.load();
+//			householdTab.setContent(tabController);
+//			tabPane.getTabs().add(householdTab);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 }
