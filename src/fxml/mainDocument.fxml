@@ -11,7 +11,7 @@
 
 <!--fx:controller="fxml.MainDocumentController"-->
 
-<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="730.0" stylesheets="@../resources/css/tab.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.MainDocumentController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="452.0" prefWidth="530.0" stylesheets="@../resources/css/tab.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.MainDocumentController">
    <children>
       <MenuBar minWidth="-Infinity" prefHeight="25.0" prefWidth="730.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
@@ -32,7 +32,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TabPane fx:id="tabPane" prefHeight="445.0" prefWidth="730.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0" />
+      <TabPane fx:id="tabPane" prefHeight="0.0" prefWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0" />
       <AnchorPane fx:id="addHousePopUp" prefHeight="240.0" prefWidth="180.0">
          <children>
             <Button fx:id="closeAddHousePopUp" alignment="TOP_CENTER" contentDisplay="TOP" graphicTextGap="0.0" layoutX="4.0" layoutY="3.0" mnemonicParsing="false" text="x" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">

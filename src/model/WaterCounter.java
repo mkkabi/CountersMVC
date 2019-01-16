@@ -1,16 +1,17 @@
 package model;
 
+import java.io.Serializable;
+
 public class WaterCounter extends Counter {
 
 	private String name;
-	private int prevData, currentData, tarif;
+	private double prevData, currentData, tarif;
 
 	public WaterCounter(String n) {
 		super(n);
 	}
 
-	@Override
-	int calculate() {
+	double calculate() {
 		return (currentData - prevData) * tarif;
 	}
 

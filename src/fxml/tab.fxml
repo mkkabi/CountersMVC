@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
@@ -10,41 +11,44 @@
 
 <!--fx:controller="fxml.TabController"-->
 
-<AnchorPane fx:id="tabAnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="407.0" prefWidth="730.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="tabAnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="530.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <SplitPane dividerPositions="0.29797979797979796" layoutX="1.0" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="407.0" prefWidth="730.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="1.0">
+      <SplitPane dividerPositions="0.4832089552238806" layoutX="1.0" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="407.0" prefWidth="730.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="1.0">
          <items>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="220.0">
                <children>
-                  <ListView fx:id="list_todo" editable="true" layoutX="1.0" layoutY="42.0" onContextMenuRequested="#openContextMenu" prefHeight="364.0" prefWidth="212.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="42.0" />
+                  <Label fx:id="tabName" alignment="CENTER" contentDisplay="CENTER" layoutX="1.0" layoutY="8.0" prefHeight="17.0" prefWidth="212.0" text="Household Name" textAlignment="CENTER" textFill="#3b8fff" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="8.0">
+                     <font>
+                        <Font name="Arial Black" size="18.0" />
+                     </font>
+                  </Label>
+                  <ListView fx:id="householdCounters" editable="true" layoutX="1.0" layoutY="42.0" onContextMenuRequested="#openContextMenu" prefHeight="364.0" prefWidth="212.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="42.0" />
                   <ImageView fx:id="editTabImage" fitHeight="25.0" fitWidth="25.0" layoutX="7.0" layoutY="255.0" onMouseClicked="#openContextMenu" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0">
                      <image>
                         <Image url="/resources/images/edit.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="tabName" alignment="CENTER" contentDisplay="CENTER" layoutX="1.0" layoutY="12.0" prefHeight="17.0" prefWidth="212.0" text="Household Name" textAlignment="CENTER" textFill="#3b8fff" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="12.0">
-                     <font>
-                        <Font name="Arial Black" size="18.0" />
-                     </font>
-                  </Label>
                </children>
             </AnchorPane>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="405.0" prefWidth="481.0">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="189.0">
                <children>
-                  <TextField layoutX="14.0" layoutY="21.0" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="25.0" prefWidth="227.0" promptText="Current" AnchorPane.leftAnchor="14.0" />
-                  <TextField layoutX="14.0" layoutY="58.0" maxHeight="-Infinity" prefHeight="25.0" prefWidth="227.0" promptText="Previous" AnchorPane.leftAnchor="14.0" />
-                  <Button layoutX="14.0" layoutY="95.0" maxHeight="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="227.0" text="Calculate" AnchorPane.leftAnchor="14.0" />
-                  <TextArea fx:id="counterData" layoutX="293.0" layoutY="1.0" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="250.0" promptText="Choose counter for calculation history" wrapText="true" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="257.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0" />
-                  <ImageView fx:id="deleteImage" fitHeight="25.0" fitWidth="25.0" layoutX="229.0" layoutY="375.0" onMouseClicked="#deleteTab" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="232.0">
-                     <image>
-                        <Image url="/resources/images/trash_l.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="307.0" layoutY="250.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
-                      <image>
-                        <Image url="/resources/images/save.png" />
-                     </image>
-              </ImageView>
+                  <AnchorPane fx:id="addCounterPane" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="121.0" layoutY="14.0" prefHeight="25.0" prefWidth="240.0" text="Add new Counter to the Household" textAlignment="CENTER" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                        <TextField fx:id="newCounterName" layoutX="15.0" layoutY="45.0" promptText="Name" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="55.0" />
+                        <TextField fx:id="newCounterRate" layoutX="15.0" layoutY="81.0" promptText="Rate" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="95.0" />
+                        <ComboBox fx:id="counterTypes" layoutX="15.0" layoutY="212.0" prefWidth="150.0" promptText="Choose Counter Type" visibleRowCount="5" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="135.0" />
+                        <Button layoutX="15.0" layoutY="352.0" mnemonicParsing="false" onMouseClicked="#addNewCounter" text="Add" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="counterDataPane" prefHeight="398.0" prefWidth="270.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <TextField maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="25.0" prefWidth="227.0" promptText="Current" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0" />
+                        <TextField maxHeight="-Infinity" prefHeight="25.0" prefWidth="227.0" promptText="Previous" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="45.0" />
+                        <Button maxHeight="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="227.0" text="Calculate" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="80.0" />
+                        <TextArea fx:id="counterData" layoutY="116.0" maxWidth="250.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="277.0" prefWidth="240.0" promptText="Choose counter for calculation history" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0" />
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
          </items>
@@ -61,12 +65,13 @@
       </AnchorPane>
       <VBox fx:id="contextMenu" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="-200.0" AnchorPane.leftAnchor="-200.0">
          <children>
-            <Button mnemonicParsing="false" onMouseClicked="#deleteTab" prefWidth="212.0" text="Delete this House">
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#setAddCounterPaneVisible" prefWidth="218.0" text="Add Counter" textAlignment="CENTER" />
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#deleteTab" prefWidth="218.0" text="Delete this House" textAlignment="CENTER">
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="closeConetxtMenu" mnemonicParsing="false" onMouseClicked="#closeContextMenu" prefHeight="25.0" prefWidth="212.0" text="Close" />
+            <Button fx:id="closeConetxtMenu" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#closeContextMenu" prefWidth="218.0" text="Close" />
          </children>
       </VBox>
    </children>

@@ -59,6 +59,10 @@ public class DataModel {
 		households.remove(house);
 		ser.saveObjects(model.Household.SAVE_FILE, households);
 	}
+	
+	public void saveCurrentState(){
+		ser.saveObjects(model.Household.SAVE_FILE, households);
+	}
 
 //	public void loadTab(TabPane tabPane, Household h) {
 //
