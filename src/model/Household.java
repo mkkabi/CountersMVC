@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Household implements Serializable, Comparable<Household> {
+public class Household implements Serializable, Comparable<Household>{
 
 	public static final String SAVE_FILE = "houses.ser";
 	private final String name;
-	public List<Counter> householdCounters;
+	public List<WaterCounter> householdCounters;
 	private final int ID;
 
 	public Household(String n) {
@@ -32,11 +32,11 @@ public class Household implements Serializable, Comparable<Household> {
 		return this.name.compareTo(o.getName());
 	}
 
-	public <T extends Counter> void addCounter(T t) {
+	public  void addCounter(WaterCounter t) {
 		householdCounters.add(t);
 	}
 
-	public List<Counter> getCounters() {
+	public List<WaterCounter> getCounters() {
 		return this.householdCounters;
 	}
 

@@ -1,6 +1,7 @@
 package fxml;
 
 import java.net.URL;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.animation.TranslateTransition;
@@ -16,10 +17,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -29,39 +35,35 @@ import model.Household;
 import model.WaterCounter;
 import model.Counter;
 
-
 public class TabController extends Tab implements Initializable {
 
 	@FXML
-	ListView householdCounters;
+	private TextArea counterData;
 	@FXML
-	ComboBox counterTypes;
+	private ListView householdCounters;
+	@FXML
+	private ComboBox counterTypes;
 	@FXML
 	private AnchorPane tabAnchorPane, addCounterPane, counterDataPane;
 	@FXML
-	Button calculateButton;
+	private Button calculateButton, addCounterButton;
 	@FXML
-	Label tabName;
+	private Label tabName;
 	@FXML
-	VBox contextMenu;
-	private ObservableList<Counter> counters;
+	private VBox contextMenu;
 	private TranslateTransition tabContextMenuTranslation;
 	private final Household house;
 
 	public TabController(Household h) {
 		house = h;
-		counters = FXCollections.observableArrayList();
-		counters.addAll(house.getCounters());	
 	}
 	private DataModel model;
 
 	public void initModel(DataModel model) {
 		if (this.model != null) {
-			// throw new IllegalStateException("Model can only be initialized once");
-			System.out.println("Model is no NULL");
+			throw new IllegalStateException("Model can only be initialized once");
 		}
 		this.model = model;
-
 	}
 
 	@Override
@@ -73,22 +75,77 @@ public class TabController extends Tab implements Initializable {
 		tabContextMenuTranslation.setToX(contextMenu.getLayoutX() + contextMenu.getPrefWidth());
 		tabContextMenuTranslation.setFromY(contextMenu.getLayoutY());
 		tabContextMenuTranslation.setToY(contextMenu.getLayoutY() - contextMenu.getPrefHeight());
-		
-		householdCounters.setItems(counters);
+
+		householdCounters.setItems(FXCollections.observableList(house.getCounters()));
 		householdCounters.getSelectionModel().selectedItemProperty().addListener(
-				  (ObservableValue observable, Object oldValue, Object newValue) -> {
-					  WaterCounter currentCounter = (WaterCounter) newValue;
-//					  Household.setCurrentCounter(currentCounter);
-//					  counterData.setText(currentCounter.text);
-				  });
+				(ObservableValue observable, Object oldValue, Object newValue) -> {
+					displaycounterDataPane((WaterCounter) newValue);
+				});
 
 		counterTypes.getItems().addAll(
 				"Water Counter",
 				"Gas Counter",
 				"Electricity Counter"
 		);
-
+		
+		addCounterButton.setOnMouseClicked(t->{
+			openAddCounterPane();
+			closeContextMenu();
+		});
+		
+		
+		final ContextMenu randomListContextMenu = new ContextMenu();
+		 MenuItem replaceCardMenuItem = new MenuItem("Replace");
+		 replaceCardMenuItem.setOnAction(t->System.out.println("menu clicked"));
+    randomListContextMenu.getItems().add(replaceCardMenuItem);
+		
+		householdCounters.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            if (event.getButton().equals(MouseButton.SECONDARY)) {
+                randomListContextMenu.show(householdCounters, event.getScreenX(), event.getScreenY());
+            }
+        }
+    });
+		 
 	}
+	
+ 
+    
+	
+	/*
+//	Context MENU for List and ets
+	
+	private void initRandomCardListView() {
+    populateRandomList();
+    final ContextMenu randomListContextMenu = new ContextMenu();
+    MenuItem replaceCardMenuItem = new MenuItem("Replace");
+    replaceCardMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            replaceRandomCard();
+        }
+    });
+    randomListContextMenu.getItems().add(replaceCardMenuItem);
+
+    randomCardList.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            if (event.getButton().equals(MouseButton.SECONDARY)) {
+                randomListContextMenu.show(randomCardList, event.getScreenX(), event.getScreenY());
+            }
+        }
+    });
+}
+
+private void replaceRandomCard() {
+    System.out.println("jobs done");
+    System.out.println("card selected: " + randomCardList.selectionModelProperty().get().getSelectedItem().toString());
+    System.out.println("card index: " + randomCardList.getSelectionModel().getSelectedIndex());
+    System.out.println("card index: " + randomCardList.getSelectionModel().getSelectedItem().toString());
+}
+	
+	*/
 
 	@FXML
 	public void deleteTab() {
@@ -135,13 +192,13 @@ public class TabController extends Tab implements Initializable {
 	}
 
 	@FXML
-	private void setCounterDataPaneVisible() {
-		counterDataPane.setVisible(true);
-	}
-
-	@FXML
-	private void setAddCounterPaneVisible() {
+	private void openAddCounterPane() {
 		addCounterPane.setVisible(true);
+	}
+	
+	@FXML
+	private void closeAddCounterPane() {
+		addCounterPane.setVisible(false);
 	}
 
 	@FXML
@@ -150,9 +207,8 @@ public class TabController extends Tab implements Initializable {
 	@FXML
 	private void addNewCounter() {
 		try {
-			String[] errors = new String[3];
-			String name = newCounterName.getText();
-			Double rate = Double.parseDouble(newCounterRate.getText());
+			String name = Objects.requireNonNull(newCounterName.getText());
+			Double rate = Objects.requireNonNull(Double.parseDouble(newCounterRate.getText()));
 			String counterType = "";
 			try {
 				counterType = counterTypes.getSelectionModel().getSelectedItem().toString();
@@ -161,20 +217,17 @@ public class TabController extends Tab implements Initializable {
 			}
 
 			System.out.println(counterTypes.getSelectionModel().getSelectedItem().toString());
-//		name = (newCounterName.getText()==null)?"NA":"enter Name";
 
-			errors[0] = (name.length() > 3) ? null : "enter name";
-			errors[1] = (rate > 0) ? null : "enter rate, only numbers allowed";
-			errors[2] = (counterType.length() > 4) ? null : "choose counter Type";
-
-			if (errors[0] == null && errors[1] == null && errors[2] == null) {
+			if (true) {
 				switch (counterType) {
 					case "Water Counter":
 						System.out.println("creating water counter");
 						WaterCounter waterC = new WaterCounter(name);
 						waterC.setRate(rate);
 						house.addCounter(waterC);
+
 						model.saveCurrentState();
+
 						break;
 					case "Gas Counter":
 						System.out.println("creating Gas counter");
@@ -182,15 +235,24 @@ public class TabController extends Tab implements Initializable {
 					case "Electricity Counter":
 						System.out.println("creating Electricity counter");
 						break;
+					default:
+						System.out.println("default");
 				}
-			} else {
-				for (String s : errors) {
-					System.out.println(s);
-				}
+closeAddCounterPane();
 			}
+
 		} catch (Exception ee) {
 			System.out.println(ee.toString());
 		}
+		householdCounters.setItems(FXCollections.observableList(house.getCounters()));
+		householdCounters.refresh();
+		
 	}
 
+	private <T extends Counter> void displaycounterDataPane(T c) {
+//		setCounterDataPaneVisible();
+		counterData.setText(c.toString());
+		
+	}
+	
 }

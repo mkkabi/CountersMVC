@@ -3,13 +3,10 @@ package model;
 
 import java.io.Serializable;
 
- public class Counter implements Serializable{
+ public class Counter implements Serializable, Countable{
 	private String name;
 	private double rate;
-	
-	public Counter(String n){
-		this.name = n;
-	}
+
 
 	public void setName(String name) {
 		this.name = name;
@@ -22,4 +19,9 @@ import java.io.Serializable;
 	
 	
 	//abstract double calculate();
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }

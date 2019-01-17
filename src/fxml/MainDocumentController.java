@@ -45,9 +45,6 @@ public class MainDocumentController {
 		if (newHouseholdName.getText().length() > 2) {
 			model.addTab(tabPane, newHouseholdName.getText());
 			addHousePopUp.setVisible(false);
-			System.out.println(waterCheckBox.isSelected());
-			System.out.println(gasCheckBox.isSelected());
-			System.out.println(electricityCheckBox.isSelected());
 		} else {
 			// info message pop up
 			System.out.println("enter household name");

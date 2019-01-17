@@ -7,7 +7,7 @@
 
 /*==========================*PopUPs, Dialog Boxes*=========================*/
 
-#contextMenu, #popUp1, #addHousePopUp, #dialogBox {
+#contextMenu, #popUp1, #addHousePopUp, #dialogBox, #addCounterPane {
     -fx-background-color: #eeeeee;
     -fx-spacing: 5;
     -fx-opacity: 0.95;
@@ -29,7 +29,7 @@
 /*END=======================*PopUPs, Dialog Boxes*=========================*/
 
 /*==========================*Buttons*=========================*/
-#closeAddHousePopUp{
+#closeAddHousePopUp, #closeAddCounterButton{
     -fx-pref-height: 16;
     -fx-min-height: 16;
     -fx-pref-width: 20;
