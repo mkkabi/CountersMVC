@@ -3,15 +3,20 @@ package model;
 public class WaterCounter extends Counter {
 
 	private String name;
-	private int prevData, currentData, tarif;
+ 
+	private double prevData, currentData, tarif;
 
 	public WaterCounter(String n) {
-		super(n);
+		this.name = n;
+	}
+
+	double calculate() {
+		return (currentData - prevData) * tarif;
 	}
 
 	@Override
-	int calculate() {
-		return (currentData - prevData) * tarif;
+	public String toString() {
+		return this.name;
 	}
 
 }

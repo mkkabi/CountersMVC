@@ -1,13 +1,27 @@
 
 package model;
 
-abstract class Counter {
+import java.io.Serializable;
+
+ public class Counter implements Serializable, Countable{
 	private String name;
-	
-	
-	public Counter(String n){
-		this.name = n;
+	private double rate;
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setRate(double rate) {
+		this.rate = rate;
 	}
 	
-	abstract int calculate();
+	
+	
+	//abstract double calculate();
+
+	@Override
+	public String toString() {
+		return name;
+	}
 }
