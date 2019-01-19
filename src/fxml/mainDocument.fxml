@@ -11,7 +11,7 @@
 
 <!--fx:controller="fxml.MainDocumentController"-->
 
-<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="452.0" prefWidth="530.0" stylesheets="@../resources/css/tab.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.MainDocumentController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="450.0" prefWidth="530.0" stylesheets="@../resources/css/tab.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.MainDocumentController">
    <children>
       <MenuBar minWidth="-Infinity" prefHeight="25.0" prefWidth="730.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
@@ -32,7 +32,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TabPane fx:id="tabPane" prefHeight="0.0" prefWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0" />
+      <TabPane fx:id="tabPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0" />
       <AnchorPane fx:id="addHousePopUp" prefHeight="240.0" prefWidth="180.0">
          <children>
             <Button fx:id="closeAddHousePopUp" alignment="TOP_CENTER" contentDisplay="TOP" graphicTextGap="0.0" layoutX="4.0" layoutY="3.0" mnemonicParsing="false" text="x" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
@@ -48,9 +48,9 @@
             <Button fx:id="saveHousehold" layoutX="19.0" layoutY="216.0" mnemonicParsing="false" onAction="#saveHousehold" text="Save" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="dialogBox" opacity="0.85" prefHeight="10.0" prefWidth="330.0" AnchorPane.bottomAnchor="-44.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0">
+      <AnchorPane fx:id="dialogBox" opacity="0.85" prefHeight="10.0" prefWidth="330.0" AnchorPane.bottomAnchor="-42.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0">
          <children>
-            <Label fx:id="infoLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="4.0" layoutY="20.0" text="adfadf" textAlignment="CENTER" textFill="#3b8fff" wrapText="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
+            <Label fx:id="dialogBoxLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="4.0" layoutY="20.0" text="adfadf" textAlignment="CENTER" textFill="#3b8fff" wrapText="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
                <font>
                   <Font size="13.0" />
                </font></Label>

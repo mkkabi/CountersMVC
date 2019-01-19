@@ -1,26 +1,32 @@
 package fxml;
 
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 import model.DataModel;
 
 public class MainDocumentController {
 
 	@FXML
-	CheckBox waterCheckBox, gasCheckBox, electricityCheckBox;
+	private Label dialogBoxLabel;
+	@FXML
+	private CheckBox waterCheckBox, gasCheckBox, electricityCheckBox;
 	@FXML
 	private Button closeAddHousePopUp;
 	@FXML
-	private AnchorPane addHousePopUp, mainPane;
+	private AnchorPane addHousePopUp, mainPane, dialogBox;
 	@FXML
 	private TextField newHouseholdName;
 	@FXML
 	private TabPane tabPane;
 	private DataModel model;
+	
 
 	public void initModel(DataModel model) {
 		if (this.model != null) {
@@ -32,12 +38,10 @@ public class MainDocumentController {
 		model.restoreTabFromSave(tabPane);
 
 		/*== Add Household popUP ==*/
- /*
-		@Todo
-		need to set popUp window layout dynamically
-		 */
 		addHousePopUp.setVisible(false);
 		closeAddHousePopUp.setOnMouseClicked(t -> addHousePopUp.setVisible(false));
+		
+		
 	}
 
 	@FXML
@@ -45,9 +49,11 @@ public class MainDocumentController {
 		if (newHouseholdName.getText().length() > 2) {
 			model.addTab(tabPane, newHouseholdName.getText());
 			addHousePopUp.setVisible(false);
+			model.showInfoMessage("new household "+newHouseholdName.getText()+" created");
 		} else {
 			// info message pop up
-			System.out.println("enter household name");
+			System.out.println("House name is too short");
+			model.showInfoMessage("House name is too short");
 		}
 	}
 
@@ -57,6 +63,8 @@ public class MainDocumentController {
 		addHousePopUp.setLayoutY((mainPane.getHeight() / 2 - addHousePopUp.getHeight() / 2));
 		addHousePopUp.setVisible(true);
 	}
+	
+	
 	
 	
 }

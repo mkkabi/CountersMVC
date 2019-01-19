@@ -1,6 +1,8 @@
 package model;
 
+import fxml.InfoBox;
 import fxml.TabController;
+import fxml.TranslationController;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedHashSet;
@@ -8,12 +10,13 @@ import java.util.Set;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
 
 public class DataModel {
 
 	private static final Set<Household> households = new LinkedHashSet();
-	private static Counter currentCounter;
 	application.Serializer<Household> ser = new application.Serializer();
+	InfoBox infoBox;
 
 	public void addTab(TabPane tabPane, String s) {
 		Household h = new Household(s);
@@ -22,10 +25,8 @@ public class DataModel {
 		loadTab(tabPane, h);
 	}
 
-	
- 
- //		loader.setController(tabController);
- //		try {
+	//		loader.setController(tabController);
+	//		try {
 //			tabController = loader.load();
 //			householdTab.setContent(tabController);
 //			tabPane.getTabs().add(householdTab);
@@ -41,9 +42,10 @@ public class DataModel {
 		loader.setController(tabController);
 		tabController.setText(hh.getName());
 		try {
- 			tabController.setContent(loader.load());
+			tabController.setContent(loader.load());
 			tabPane.getTabs().add(tabController);
-		} catch (IOException e) {System.out.println(e.toString());
+		} catch (IOException e) {
+			System.out.println(e.toString());
 		}
 	}
 
@@ -54,13 +56,13 @@ public class DataModel {
 			System.out.println(f.toString());
 		}
 	}
-	
-	public void removeHousehold(Household house){
+
+	public void removeHousehold(Household house) {
 		households.remove(house);
 		ser.saveObjects(model.Household.SAVE_FILE, households);
 	}
-	
-	public void saveCurrentState(){
+
+	public void saveCurrentState() {
 		ser.saveObjects(model.Household.SAVE_FILE, households);
 	}
 
@@ -79,4 +81,18 @@ public class DataModel {
 //			e.printStackTrace();
 //		}
 //	}
+	public void writeCalculationToFile() {
+
+	}
+
+	public void setInfoBox(InfoBox infoBox) {
+		this.infoBox = infoBox;
+	}
+
+	public void showInfoMessage(String message) {	
+		infoBox.setText(message);
+//		tc.translateObjBottomUp(infoBox);
+		TranslationController.translateObjTopDown(infoBox);
+
+	}
 }

@@ -1,10 +1,16 @@
 package fxml;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.TranslateTransition;
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,14 +25,17 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -35,12 +44,12 @@ import model.Household;
 import model.WaterCounter;
 import model.Counter;
 
-public class TabController extends Tab implements Initializable {
+public class TabController<T extends Counter> extends Tab implements Initializable {
 
 	@FXML
 	private TextArea counterData;
 	@FXML
-	private ListView householdCounters;
+	private ListView countersList;
 	@FXML
 	private ComboBox counterTypes;
 	@FXML
@@ -53,9 +62,13 @@ public class TabController extends Tab implements Initializable {
 	private VBox contextMenu;
 	private TranslateTransition tabContextMenuTranslation;
 	private final Household house;
+	private Counter currentCounter;
+	private ObservableList<Counter> countersObservable;
+	private ListController<Counter> countersController;
 
 	public TabController(Household h) {
 		house = h;
+		countersObservable = FXCollections.observableArrayList();
 	}
 	private DataModel model;
 
@@ -76,76 +89,29 @@ public class TabController extends Tab implements Initializable {
 		tabContextMenuTranslation.setFromY(contextMenu.getLayoutY());
 		tabContextMenuTranslation.setToY(contextMenu.getLayoutY() - contextMenu.getPrefHeight());
 
-		householdCounters.setItems(FXCollections.observableList(house.getCounters()));
-		householdCounters.getSelectionModel().selectedItemProperty().addListener(
-				(ObservableValue observable, Object oldValue, Object newValue) -> {
-					displaycounterDataPane((WaterCounter) newValue);
-				});
+		countersController = new ListController(countersList, house.getCounters(), model);
+		countersController.initList();
+		application.NIO nio = new application.NIO();
+//		countersController.setSelectionModel(c -> counterData.setText(nio.fileToString("counterdata")));
+		countersController.setSelectionModel(t->{
+				Counter c = (Counter)t;
+				System.out.println(c.getRate());
+				counterData.setText(c.getRate()+"\n"+c.getClass());
+			});
+		
 
 		counterTypes.getItems().addAll(
-				"Water Counter",
-				"Gas Counter",
-				"Electricity Counter"
+				  "Water Counter",
+				  "Gas Counter",
+				  "Electricity Counter"
 		);
-		
-		addCounterButton.setOnMouseClicked(t->{
+
+		addCounterButton.setOnMouseClicked(t -> {
 			openAddCounterPane();
 			closeContextMenu();
 		});
-		
-		
-		final ContextMenu randomListContextMenu = new ContextMenu();
-		 MenuItem replaceCardMenuItem = new MenuItem("Replace");
-		 replaceCardMenuItem.setOnAction(t->System.out.println("menu clicked"));
-    randomListContextMenu.getItems().add(replaceCardMenuItem);
-		
-		householdCounters.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent event) {
-            if (event.getButton().equals(MouseButton.SECONDARY)) {
-                randomListContextMenu.show(householdCounters, event.getScreenX(), event.getScreenY());
-            }
-        }
-    });
-		 
+
 	}
-	
- 
-    
-	
-	/*
-//	Context MENU for List and ets
-	
-	private void initRandomCardListView() {
-    populateRandomList();
-    final ContextMenu randomListContextMenu = new ContextMenu();
-    MenuItem replaceCardMenuItem = new MenuItem("Replace");
-    replaceCardMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            replaceRandomCard();
-        }
-    });
-    randomListContextMenu.getItems().add(replaceCardMenuItem);
-
-    randomCardList.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent event) {
-            if (event.getButton().equals(MouseButton.SECONDARY)) {
-                randomListContextMenu.show(randomCardList, event.getScreenX(), event.getScreenY());
-            }
-        }
-    });
-}
-
-private void replaceRandomCard() {
-    System.out.println("jobs done");
-    System.out.println("card selected: " + randomCardList.selectionModelProperty().get().getSelectedItem().toString());
-    System.out.println("card index: " + randomCardList.getSelectionModel().getSelectedIndex());
-    System.out.println("card index: " + randomCardList.getSelectionModel().getSelectedItem().toString());
-}
-	
-	*/
 
 	@FXML
 	public void deleteTab() {
@@ -155,7 +121,9 @@ private void replaceRandomCard() {
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			model.removeHousehold(house);
+			
 			closeTab();
+			model.showInfoMessage("Household "+house.getName() + " removed");
 		}
 	}
 
@@ -170,7 +138,7 @@ private void replaceRandomCard() {
 	}
 
 	@FXML
-	public void openCounterEditPopUp() {
+	public void openEditCounterPopUp() {
 		System.out.println(tabAnchorPane.getWidth());
 		System.out.println(tabAnchorPane.getHeight());
 
@@ -193,9 +161,10 @@ private void replaceRandomCard() {
 
 	@FXML
 	private void openAddCounterPane() {
+		addCounterPane.setLayoutX((tabAnchorPane.getWidth() - addCounterPane.getPrefWidth()) / 2);
 		addCounterPane.setVisible(true);
 	}
-	
+
 	@FXML
 	private void closeAddCounterPane() {
 		addCounterPane.setVisible(false);
@@ -206,6 +175,7 @@ private void replaceRandomCard() {
 
 	@FXML
 	private void addNewCounter() {
+		Counter counter = null;
 		try {
 			String name = Objects.requireNonNull(newCounterName.getText());
 			Double rate = Objects.requireNonNull(Double.parseDouble(newCounterRate.getText()));
@@ -222,12 +192,8 @@ private void replaceRandomCard() {
 				switch (counterType) {
 					case "Water Counter":
 						System.out.println("creating water counter");
-						WaterCounter waterC = new WaterCounter(name);
-						waterC.setRate(rate);
-						house.addCounter(waterC);
-
-						model.saveCurrentState();
-
+						counter = new WaterCounter(name);
+						counter.setRate(rate);
 						break;
 					case "Gas Counter":
 						System.out.println("creating Gas counter");
@@ -238,21 +204,30 @@ private void replaceRandomCard() {
 					default:
 						System.out.println("default");
 				}
-closeAddCounterPane();
+				countersController.addNewItem(counter);
+				closeAddCounterPane();
 			}
 
 		} catch (Exception ee) {
 			System.out.println(ee.toString());
 		}
-		householdCounters.setItems(FXCollections.observableList(house.getCounters()));
-		householdCounters.refresh();
-		
+
 	}
 
 	private <T extends Counter> void displaycounterDataPane(T c) {
-//		setCounterDataPaneVisible();
 		counterData.setText(c.toString());
-		
+	}
+
+	private void deleteHousehodCounter(T t) {
+		house.getCounters().remove(t);
+		countersObservable.remove(t);
+		countersList.refresh();
+		model.saveCurrentState();
 	}
 	
+	@FXML
+	private void showMessage(){
+		model.showInfoMessage("Test message from tabController");
+	}
+
 }

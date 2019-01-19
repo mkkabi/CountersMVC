@@ -3,19 +3,23 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
+import static javafx.collections.FXCollections.observableArrayList;
+import javafx.collections.ObservableList;
 
-public class Household implements Serializable, Comparable<Household>{
+public class Household <T extends Counter> implements Serializable, Comparable<Household> {
 
 	public static final String SAVE_FILE = "houses.ser";
 	private final String name;
-	public List<WaterCounter> householdCounters;
+//	public List<WaterCounter> householdCounters;
+	private ArrayList<T> counters;
 	private final int ID;
 
 	public Household(String n) {
 		ID = (int) (Math.random() * 10000);
 		name = n;
 		System.out.println("created Household with name " + n);
-		householdCounters = new ArrayList();
+		counters = new ArrayList();
 	}
 
 	public String getName() {
@@ -32,12 +36,14 @@ public class Household implements Serializable, Comparable<Household>{
 		return this.name.compareTo(o.getName());
 	}
 
-	public  void addCounter(WaterCounter t) {
-		householdCounters.add(t);
+	public void addCounter(T t) {
+//		householdCounters.add(t);
+		counters.add(t);
 	}
 
-	public List<WaterCounter> getCounters() {
-		return this.householdCounters;
+	public ArrayList<T> getCounters() {
+//		return this.householdCounters;
+		return this.counters;
 	}
 
 }

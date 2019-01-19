@@ -7,7 +7,7 @@
 
 /*==========================*PopUPs, Dialog Boxes*=========================*/
 
-#contextMenu, #popUp1, #addHousePopUp, #dialogBox, #addCounterPane {
+#contextMenu, #popUp1, #addHousePopUp, #addCounterPane, #infoBox {
     -fx-background-color: #eeeeee;
     -fx-spacing: 5;
     -fx-opacity: 0.95;
@@ -16,9 +16,20 @@
     -fx-border-width: 2; 
 }
 
-#dialogBox{
+#infoBox{
     -fx-max-height: 10;
 }
+#infoBox .label{
+    -fx-padding: 5 20 5 20;
+    -fx-text-fill: #3b8fff;
+    -fx-font-weight: bold;
+    
+}
+
+#counterImage{
+    -fx-opacity: 0.5;
+}
+
 
 /*#addHousePopUp .label, #addHousePopUp checkbox {
     -fx-margin-top: 15;
