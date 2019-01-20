@@ -11,7 +11,7 @@
 
 <!--fx:controller="fxml.MainDocumentController"-->
 
-<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="450.0" prefWidth="530.0" stylesheets="@../resources/css/tab.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.MainDocumentController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="450.0" prefWidth="580.0" stylesheets="@../resources/css/tab.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.MainDocumentController">
    <children>
       <MenuBar minWidth="-Infinity" prefHeight="25.0" prefWidth="730.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>

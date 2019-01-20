@@ -86,20 +86,16 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 		this.model = model;
 	}
 
-	
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
 /////////////////////TABLEVIEW////////////////////////////////
-		
-		
+		TableViewDynamic tvd = new TableViewDynamic();
 		try {
-			TableViewDynamic tvd = new TableViewDynamic();
-			tableHBox.getChildren().add(tvd.createTableView());
+			tableHBox.getChildren().add(tvd.createTableView2());
 		} catch (IOException ex) {System.out.println(ex.toString());
-		
 		}
+ 
 				
 		
 //END////////////////////TABLEVIEW////////////////////////////////
