@@ -23,11 +23,10 @@
     -fx-padding: 5 20 5 20;
     -fx-text-fill: #3b8fff;
     -fx-font-weight: bold;
-    
 }
 
 #counterImage{
-    -fx-opacity: 0.5;
+    -fx-opacity: 0.75;
 }
 
 

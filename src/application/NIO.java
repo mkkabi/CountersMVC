@@ -20,20 +20,16 @@ public class NIO {
 	public void readFile(String location) throws IOException {
 		Path path = Paths.get(location);
 //		Files.createFile(path);
-File adsf = new File("resource");
+		File adsf = new File("resource");
 	}
 
 	private void fileToStream(String filePath) {
-		long uniqueWords = 0;
 		try (Stream<String> lines = Files.lines(Paths.get(filePath),
-				  Charset.defaultCharset())) {
-//				uniqueWords = lines.flatMap(line->Arrays.stream(line.split(" ")))
-//						.distinct().count();
-			lines.flatMap(line -> Arrays.stream(line.split(" ")))
-					  .distinct().forEach(System.out::println);
-		} catch (Exception e) {
-		}
-//		System.out.println("unique qords number: "+uniqueWords);
+				Charset.defaultCharset())) {
+
+			lines.flatMap(line -> Arrays.stream(line.split(";")))
+					.distinct().forEach(System.out::println);
+		} catch (Exception e) {}
 	}
 
 	public String fileToString(String filePath) {
@@ -43,7 +39,7 @@ File adsf = new File("resource");
 		try {
 			reader = new BufferedReader(new FileReader(new File(filePath)));
 			while ((line = reader.readLine()) != null) {
-				result.append(line+"\n");
+				result.append(line + "\n");
 			}
 		} catch (FileNotFoundException ex) {
 			//Logger.getLogger(ReadFile.class.getName()).log(Level.SEVERE, null, ex);
