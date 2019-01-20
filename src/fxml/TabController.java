@@ -53,25 +53,26 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 
 
 	@FXML
-	HBox tableHBox;
+	private HBox tableHBox;
 	@FXML
 	private ListView countersList;
 	@FXML
 	private ComboBox counterTypes;
 	@FXML
-	private AnchorPane tabAnchorPane, addCounterPane, counterDataPane;
+	private AnchorPane tabAnchorPane, addCounterPane;
 	@FXML
 	private Button calculateButton, addCounterButton;
 	@FXML
 	private Label tabName;
 	@FXML
 	private VBox contextMenu;
+	@FXML
+	TextField newCounterName, newCounterRate, currentDataTextField, previousDataTextField;
 	private TranslateTransition tabContextMenuTranslation;
 	private final Household house;
-	private Counter currentCounter;
-	private ObservableList<Counter> countersObservable;
+ 	private ObservableList<Counter> countersObservable;
 	private ListController<Counter> countersController;
-
+TableViewDynamic tvd;
 	
 	public TabController(Household h) {
 		house = h;
@@ -90,14 +91,11 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 	public void initialize(URL location, ResourceBundle resources) {
 		
 /////////////////////TABLEVIEW////////////////////////////////
-		TableViewDynamic tvd = new TableViewDynamic();
-		try {
-			tableHBox.getChildren().add(tvd.createTableView2());
-		} catch (IOException ex) {System.out.println(ex.toString());
-		}
- 
-				
+TableView<ObservableList<String>> tableView = new TableView<>();
+		  tvd = new TableViewDynamic(tableView);
+		  tableHBox.getChildren().add(tableView);
 		
+
 //END////////////////////TABLEVIEW////////////////////////////////
 		
 		
@@ -112,10 +110,16 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 		countersController = new ListController(countersList, house.getCounters(), model);
 		countersController.initList();
 		application.NIO nio = new application.NIO();
-		countersController.setSelectionModel(t -> {Counter c = (Counter) t;});
-		
-
-		
+		countersController.setSelectionModel(t -> {
+			Counter c = (Counter) t;
+			tableView.refresh();
+			  try {
+				  tvd.createTableView2(house.getName()+"/"+c.getFileName());
+			  } catch (IOException ex) {
+				  Logger.getLogger(TabController.class.getName()).log(Level.SEVERE, null, ex);
+			  }
+ 
+		});
 		
 		counterTypes.getItems().addAll(
 				"Water Counter",
@@ -188,11 +192,11 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 		addCounterPane.setVisible(false);
 	}
 
-	@FXML
-	TextField newCounterName, newCounterRate;
+	
 
 	@FXML
 	private void addNewCounter() {
+		// как правильно создавать класс
 		Counter counter = null;
  
 			String name = Objects.requireNonNull(newCounterName.getText());
@@ -201,29 +205,31 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 
 				switch (counterType) {
 					case "Water Counter":
-						System.out.println("creating water counter");
+						System.out.println("creating water counter "+name);
 						counter = new WaterCounter(name);
-						counter.setRate(rate);
+//						counter.setRate(rate);
 						break;
 					case "Gas Counter":
-						System.out.println("creating Gas counter");
+						System.out.println("creating Gas counter "+name);
 						counter = new GasCounter(name);
-						counter.setRate(rate);
+//						counter.setRate(rate);
 						break;
 					case "Electricity Counter":
-						System.out.println("creating Electricity counter");
+						System.out.println("creating Electricity counter "+name);
 						counter = new ElectricityCounter(name);
-						counter.setRate(rate);
+//						counter.setRate(rate);
 						break;
 					default:
 						model.showInfoMessage("Select counter type!");
 				}
+				counter.setRate(rate);
+				counter.setFileName(house.getName()+"_"+counter.getName()+".csv");
+				System.out.println("counter name "+counter.getName()+" rate "+counter.getRate());
+				application.NIO.createCounterFile(house.getName()+"/"+counter.getFileName(), application.NIO.counterCSVHeader);
 				countersController.addNewItem(counter);
 				closeAddCounterPane();
-				System.out.println("saved");
- 
- 
-
+				System.out.println("house counters====");
+				System.out.println(house.getCounters());
 	}
 
 	private <T extends Counter> void displaycounterDataPane(T c) {

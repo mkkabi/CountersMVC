@@ -1,11 +1,13 @@
 package application;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -13,9 +15,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileAttribute;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class NIO {
+
+	public static String counterCSVHeader = "date;prev;current;amount;rate;pay\n";
 
 	public void readFile(String location) throws IOException {
 		Path path = Paths.get(location);
@@ -23,13 +29,59 @@ public class NIO {
 		File adsf = new File("resource");
 	}
 
+	public static void createCounterFile(String uri, String text) {
+//		Path path = Paths.get(uri);
+//		try {
+//			Files.createFile(path);
+//		} catch (IOException ex) {
+//			System.out.println(ex.toString());
+//		}
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File(uri)));
+				  BufferedReader br = new BufferedReader(new FileReader(new File(uri)));) {
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < br.read();) {
+				System.out.println(i);
+			}
+			bw.write(text);
+		} catch (IOException ex) {
+			System.out.println(ex.toString() + " from application.NIO");
+		}
+	}
+	
+	public static void createDir(String uri){
+		Path path = Paths.get(uri);
+		try {
+			Files.createDirectory(path);
+		} catch (IOException ex) {System.out.println(ex.toString() + " from application.NIO");
+		}
+	}
+
+	public static void createFile(String uri) {
+		Path path = Paths.get(uri);
+		try {
+			Files.createFile(path);
+		} catch (IOException ex) {
+			System.out.println(ex.toString() + " from aplication.NIO");
+		}
+	}
+
+	public static void writeTextToFile(String text, String uri) {
+		Path path = Paths.get(uri);
+		try (FileWriter fw = new FileWriter(new File(uri));) {
+			fw.write(text);
+		} catch (IOException ex) {
+			System.out.println(ex.toString() + " from application.NIO");
+		}
+	}
+
 	private void fileToStream(String filePath) {
 		try (Stream<String> lines = Files.lines(Paths.get(filePath),
-				Charset.defaultCharset())) {
+				  Charset.defaultCharset())) {
 
 			lines.flatMap(line -> Arrays.stream(line.split(";")))
-					.distinct().forEach(System.out::println);
-		} catch (Exception e) {}
+					  .distinct().forEach(System.out::println);
+		} catch (Exception e) {
+		}
 	}
 
 	public String fileToString(String filePath) {

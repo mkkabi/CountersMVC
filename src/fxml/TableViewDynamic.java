@@ -18,41 +18,42 @@ import javafx.stage.Stage;
 
 public class TableViewDynamic {
 
-//	TableView tableView;
-//
-//	public TableViewDynamic(TableView t) {
-//		tableView = t;
-//	}
+	TableView<ObservableList<String>> tableView;
 	
+	public TableViewDynamic(TableView<ObservableList<String>> tableView){
+		this.tableView = tableView;
+	}
+	
+	public TableView<ObservableList<String>> getTableView(){
+		return this.tableView;
+	}
 
-	public List<String[]> parseFileToArray() {
-		String filePath = "counterdata.csv";
+	public List<String[]> parseFileToArray(String filePath) {
 		List<String[]> list = new ArrayList();
 		try (Stream<String> lines = Files.lines(Paths.get(filePath), Charset.defaultCharset())) {
 //			= lines.map(t->Arrays.asList(t.split(";"))).collect(Collectors.toList());
 			lines.forEach(t -> list.add(t.split(";")));
- 
 		} catch (Exception e) {
-			System.out.println(e.toString()+" from "+this.getClass());
+			System.out.println(e.toString() + " from " + this.getClass());
 		}
- 
 		return list;
 	}
-	
-	private ObservableList<ObservableList<String>> buildData2() {
+
+	private ObservableList<ObservableList<String>> buildData2(String filePath) {
 		ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
-		List<String[]> list = parseFileToArray();
+		data.removeAll();
+		List<String[]> list = parseFileToArray(filePath);
 		for (int i = 0; i < list.size(); i++) {
 			data.add(FXCollections.observableArrayList(list.get(i)));
 		}
 		return data;
 	}
-	
-	
-	public TableView<ObservableList<String>> createTableView2() throws IOException {
-		TableView<ObservableList<String>> tableView = new TableView<>();
-		ObservableList<ObservableList<String>> data = buildData2();
+
+	public void createTableView2(String filePath) throws IOException {
+		tableView.getColumns().clear();
+		ObservableList<ObservableList<String>> data = buildData2(filePath);
 		ObservableList<String> firstLine = data.remove(0);
+		
 		tableView.setItems(data);
 		for (int i = 0; i < firstLine.size(); i++) {
 			final int curCol = i;
@@ -64,11 +65,9 @@ public class TableViewDynamic {
 			);
 			tableView.getColumns().add(column);
 		}
-		return tableView;
+
 	}
-	
-	
-	
+
 	private final String[][] dataArray = {
 		{"date", "prev", "current", "amount", "rate", "pay"},
 		{"jeep", "camaro", "corvette", "asdf", "asdf", "asdf"},

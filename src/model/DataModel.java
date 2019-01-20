@@ -21,6 +21,7 @@ public class DataModel {
 	public void addTab(TabPane tabPane, String s) {
 		Household h = new Household(s);
 		households.add(h);
+		application.NIO.createDir(s);
 		ser.saveObjects(model.Household.SAVE_FILE, households);
 		loadTab(tabPane, h);
 	}
