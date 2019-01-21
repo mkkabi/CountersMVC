@@ -49,7 +49,7 @@ public class TableViewDynamic {
 		return data;
 	}
 
-	public void createTableView2(String filePath) throws IOException {
+	public void createTableView2(String filePath) {
 		tableView.getColumns().clear();
 		ObservableList<ObservableList<String>> data = buildData2(filePath);
 		ObservableList<String> firstLine = data.remove(0);

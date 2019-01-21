@@ -30,7 +30,7 @@
                <children>
                   <TextField fx:id="currentDataTextField" layoutX="15.0" layoutY="43.0" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="25.0" prefWidth="227.0" promptText="Current" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
                   <TextField fx:id="previousDataTextField" layoutX="22.0" layoutY="101.0" maxHeight="-Infinity" prefHeight="25.0" prefWidth="227.0" promptText="Previous" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="55.0" />
-                  <Button layoutX="15.0" layoutY="138.0" maxHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#showMessage" prefHeight="25.0" prefWidth="227.0" text="Calculate" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="95.0" />
+                  <Button layoutX="15.0" layoutY="138.0" maxHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#calculate" prefHeight="25.0" prefWidth="227.0" text="Calculate" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="95.0" />
                   <TextArea fx:id="counterData" disable="true" layoutY="184.0" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="240.0" promptText="Choose counter for calculation history" visible="false" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="135.0" />
                   <HBox fx:id="tableHBox" layoutX="14.0" layoutY="120.0" prefHeight="244.0" prefWidth="335.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="135.0" />
                </children>

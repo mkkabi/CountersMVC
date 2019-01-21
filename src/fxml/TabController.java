@@ -2,6 +2,8 @@ package fxml;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -51,7 +53,6 @@ import model.GasCounter;
 
 public class TabController<T extends Counter> extends Tab implements Initializable {
 
-
 	@FXML
 	private HBox tableHBox;
 	@FXML
@@ -70,10 +71,13 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 	TextField newCounterName, newCounterRate, currentDataTextField, previousDataTextField;
 	private TranslateTransition tabContextMenuTranslation;
 	private final Household house;
- 	private ObservableList<Counter> countersObservable;
+	private ObservableList<Counter> countersObservable;
 	private ListController<Counter> countersController;
-TableViewDynamic tvd;
-	
+	private Counter currentCounter;
+	private TableView<ObservableList<String>> tableView;
+
+	TableViewDynamic tvd;
+
 	public TabController(Household h) {
 		house = h;
 		countersObservable = FXCollections.observableArrayList();
@@ -89,16 +93,13 @@ TableViewDynamic tvd;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 /////////////////////TABLEVIEW////////////////////////////////
-TableView<ObservableList<String>> tableView = new TableView<>();
-		  tvd = new TableViewDynamic(tableView);
-		  tableHBox.getChildren().add(tableView);
-		
+		tableView = new TableView<>();
+		tvd = new TableViewDynamic(tableView);
+		tableHBox.getChildren().add(tableView);
 
 //END////////////////////TABLEVIEW////////////////////////////////
-		
-		
 		tabName.setText(house.getName());
 
 		tabContextMenuTranslation = new TranslateTransition(Duration.millis(500), contextMenu);
@@ -111,16 +112,14 @@ TableView<ObservableList<String>> tableView = new TableView<>();
 		countersController.initList();
 		application.NIO nio = new application.NIO();
 		countersController.setSelectionModel(t -> {
-			Counter c = (Counter) t;
+			currentCounter = (Counter) t;
+
 			tableView.refresh();
-			  try {
-				  tvd.createTableView2(house.getName()+"/"+c.getFileName());
-			  } catch (IOException ex) {
-				  Logger.getLogger(TabController.class.getName()).log(Level.SEVERE, null, ex);
-			  }
+ 
+				tvd.createTableView2(house.getName() + "/" + currentCounter.getFileName());
  
 		});
-		
+
 		counterTypes.getItems().addAll(
 				"Water Counter",
 				"Gas Counter",
@@ -133,7 +132,6 @@ TableView<ObservableList<String>> tableView = new TableView<>();
 		});
 
 	}
-				
 
 	@FXML
 	public void deleteTab() {
@@ -192,44 +190,42 @@ TableView<ObservableList<String>> tableView = new TableView<>();
 		addCounterPane.setVisible(false);
 	}
 
-	
-
 	@FXML
 	private void addNewCounter() {
 		// как правильно создавать класс
 		Counter counter = null;
- 
-			String name = Objects.requireNonNull(newCounterName.getText());
-			Double rate = Objects.requireNonNull(Double.parseDouble(newCounterRate.getText()));
-			String counterType = Objects.requireNonNull(counterTypes.getSelectionModel().getSelectedItem().toString());
 
-				switch (counterType) {
-					case "Water Counter":
-						System.out.println("creating water counter "+name);
-						counter = new WaterCounter(name);
+		String name = Objects.requireNonNull(newCounterName.getText());
+		Double rate = Objects.requireNonNull(Double.parseDouble(newCounterRate.getText()));
+		String counterType = Objects.requireNonNull(counterTypes.getSelectionModel().getSelectedItem().toString());
+
+		switch (counterType) {
+			case "Water Counter":
+				System.out.println("creating water counter " + name);
+				counter = new WaterCounter(name);
 //						counter.setRate(rate);
-						break;
-					case "Gas Counter":
-						System.out.println("creating Gas counter "+name);
-						counter = new GasCounter(name);
+				break;
+			case "Gas Counter":
+				System.out.println("creating Gas counter " + name);
+				counter = new GasCounter(name);
 //						counter.setRate(rate);
-						break;
-					case "Electricity Counter":
-						System.out.println("creating Electricity counter "+name);
-						counter = new ElectricityCounter(name);
+				break;
+			case "Electricity Counter":
+				System.out.println("creating Electricity counter " + name);
+				counter = new ElectricityCounter(name);
 //						counter.setRate(rate);
-						break;
-					default:
-						model.showInfoMessage("Select counter type!");
-				}
-				counter.setRate(rate);
-				counter.setFileName(house.getName()+"_"+counter.getName()+".csv");
-				System.out.println("counter name "+counter.getName()+" rate "+counter.getRate());
-				application.NIO.createCounterFile(house.getName()+"/"+counter.getFileName(), application.NIO.counterCSVHeader);
-				countersController.addNewItem(counter);
-				closeAddCounterPane();
-				System.out.println("house counters====");
-				System.out.println(house.getCounters());
+				break;
+			default:
+				model.showInfoMessage("Select counter type!");
+		}
+		counter.setRate(rate);
+		counter.setFileName(house.getName() + "_" + counter.getName() + ".csv");
+		System.out.println("counter name " + counter.getName() + " rate " + counter.getRate());
+		application.NIO.createCounterFile(house.getName() + "/" + counter.getFileName(), application.NIO.counterCSVHeader);
+		countersController.addNewItem(counter);
+		closeAddCounterPane();
+		System.out.println("house counters====");
+		System.out.println(house.getCounters());
 	}
 
 	private <T extends Counter> void displaycounterDataPane(T c) {
@@ -248,4 +244,17 @@ TableView<ObservableList<String>> tableView = new TableView<>();
 		model.showInfoMessage("Test message from tabController");
 	}
 
+	@FXML
+	private void calculate() {
+		Double current = Objects.requireNonNull(Double.parseDouble(currentDataTextField.getText()));
+		Double previous = Objects.requireNonNull(Double.parseDouble(previousDataTextField.getText()));
+		double difference = current - previous;
+		double result = difference * currentCounter.getRate();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String dateString = format.format(new Date());
+		String textToSave = dateString + ";" + previous + ";" + current + ";" + difference + ";" + currentCounter.getRate() + ";" + result;
+		model.saveCalculation(house.getName() + "/" + currentCounter.getFileName(), textToSave);
+		
+		tvd.createTableView2(house.getName() + "/" + currentCounter.getFileName());
+	}
 }

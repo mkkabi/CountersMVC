@@ -10,9 +10,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileAttribute;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -37,7 +39,7 @@ public class NIO {
 //			System.out.println(ex.toString());
 //		}
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File(uri)));
-				  BufferedReader br = new BufferedReader(new FileReader(new File(uri)));) {
+				BufferedReader br = new BufferedReader(new FileReader(new File(uri)));) {
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < br.read();) {
 				System.out.println(i);
@@ -47,12 +49,13 @@ public class NIO {
 			System.out.println(ex.toString() + " from application.NIO");
 		}
 	}
-	
-	public static void createDir(String uri){
+
+	public static void createDir(String uri) {
 		Path path = Paths.get(uri);
 		try {
 			Files.createDirectory(path);
-		} catch (IOException ex) {System.out.println(ex.toString() + " from application.NIO");
+		} catch (IOException ex) {
+			System.out.println(ex.toString() + " from application.NIO");
 		}
 	}
 
@@ -62,6 +65,16 @@ public class NIO {
 			Files.createFile(path);
 		} catch (IOException ex) {
 			System.out.println(ex.toString() + " from aplication.NIO");
+		}
+	}
+
+	public static void appendLine(String uri, String text) {
+		try {
+			final Path path = Paths.get(uri);
+			Files.write(path, Arrays.asList(text), StandardCharsets.UTF_8,
+					Files.exists(path) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
+		} catch (final IOException ioe) {
+    System.out.println(ioe.toString());
 		}
 	}
 
@@ -76,10 +89,10 @@ public class NIO {
 
 	private void fileToStream(String filePath) {
 		try (Stream<String> lines = Files.lines(Paths.get(filePath),
-				  Charset.defaultCharset())) {
+				Charset.defaultCharset())) {
 
 			lines.flatMap(line -> Arrays.stream(line.split(";")))
-					  .distinct().forEach(System.out::println);
+					.distinct().forEach(System.out::println);
 		} catch (Exception e) {
 		}
 	}

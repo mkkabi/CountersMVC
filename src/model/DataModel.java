@@ -90,10 +90,14 @@ public class DataModel {
 		this.infoBox = infoBox;
 	}
 
-	public void showInfoMessage(String message) {	
+	public void showInfoMessage(String message) {
 		infoBox.setText(message);
 //		tc.translateObjBottomUp(infoBox);
 		TranslationController.translateObjTopDown(infoBox);
-
+	}
+	
+	public static void saveCalculation(String uri, String text){
+		
+		application.NIO.appendLine(uri, text);
 	}
 }
