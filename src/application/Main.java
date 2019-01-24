@@ -63,13 +63,7 @@ infoBox.setVisible(false);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-          public void handle(WindowEvent we) {
-              model.saveCurrentState();
-          }
-      });        
-        
-
+		primaryStage.setOnCloseRequest(w -> model.saveCurrentState());
  	}
 
 	// annoying Eclipse launch workaround:
