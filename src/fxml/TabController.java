@@ -98,8 +98,8 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 		tableView = new TableView<>();
 		tvd = new TableViewDynamic(tableView);
 		tableHBox.getChildren().add(tableView);
-
-//END////////////////////TABLEVIEW////////////////////////////////
+//END TABLEVIEW////////////////////////////////
+		
 		tabName.setText(house.getName());
 
 		tabContextMenuTranslation = new TranslateTransition(Duration.millis(500), contextMenu);
@@ -113,10 +113,11 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 		application.NIO nio = new application.NIO();
 		countersController.setSelectionModel(t -> {
 			currentCounter = (Counter) t;
-
+			previousDataTextField.setText(currentCounter.getPreviousData()+"");
+//					setText(currentCounter.getPreviousData().toString());
+			
 			tableView.refresh();
- 
-				tvd.createTableView2(house.getName() + "/" + currentCounter.getFileName());
+			tvd.createTableView2(house.getName() + "/" + currentCounter.getFileName());
  
 		});
 
@@ -250,11 +251,11 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 		Double previous = Objects.requireNonNull(Double.parseDouble(previousDataTextField.getText()));
 		double difference = current - previous;
 		double result = difference * currentCounter.getRate();
+		currentCounter.setPreviousData(current);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String dateString = format.format(new Date());
 		String textToSave = dateString + ";" + previous + ";" + current + ";" + difference + ";" + currentCounter.getRate() + ";" + result;
 		model.saveCalculation(house.getName() + "/" + currentCounter.getFileName(), textToSave);
-		
 		tvd.createTableView2(house.getName() + "/" + currentCounter.getFileName());
 	}
 }

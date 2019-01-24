@@ -14,6 +14,7 @@ public class Household <T extends Counter> implements Serializable, Comparable<H
 //	public List<WaterCounter> householdCounters;
 	private ArrayList<T> counters;
 	private final int ID;
+	private double previousData;
 
 	public Household(String n) {
 		ID = (int) (Math.random() * 10000);
@@ -24,6 +25,14 @@ public class Household <T extends Counter> implements Serializable, Comparable<H
 
 	public String getName() {
 		return this.name;
+	}
+	
+	public void setPreviousData(double previousData) {
+		this.previousData = previousData;
+	}
+
+	public double getPreviousData() {
+		return previousData;
 	}
 
 	@Override

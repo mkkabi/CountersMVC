@@ -31,7 +31,10 @@ public class TableViewDynamic {
 	public List<String[]> parseFileToArray(String filePath) {
 		List<String[]> list = new ArrayList();
 		try (Stream<String> lines = Files.lines(Paths.get(filePath), Charset.defaultCharset())) {
-//			= lines.map(t->Arrays.asList(t.split(";"))).collect(Collectors.toList());
+
+//			 ArrayList<ArrayList<String>> listik = lines.map(t -> Arrays.asList(";").stream()
+//					.collect(Collectors.toCollection(ArrayList::new))).collect(Collectors.toCollection(ArrayList::new));
+			 
 			lines.forEach(t -> list.add(t.split(";")));
 		} catch (Exception e) {
 			System.out.println(e.toString() + " from " + this.getClass());
@@ -42,6 +45,7 @@ public class TableViewDynamic {
 	private ObservableList<ObservableList<String>> buildData2(String filePath) {
 		ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
 		data.removeAll();
+		
 		List<String[]> list = parseFileToArray(filePath);
 		for (int i = 0; i < list.size(); i++) {
 			data.add(FXCollections.observableArrayList(list.get(i)));
@@ -60,10 +64,9 @@ public class TableViewDynamic {
 			final TableColumn<ObservableList<String>, String> column = new TableColumn<>(
 					  firstLine.get(i)
 			);
-			column.setCellValueFactory(
-					  param -> new ReadOnlyObjectWrapper<>(param.getValue().get(curCol))
-			);
+			column.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue().get(curCol)));
 			tableView.getColumns().add(column);
+			tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		}
 
 	}

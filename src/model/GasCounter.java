@@ -3,7 +3,7 @@ package model;
 public class GasCounter extends Counter {
 
 	private String name, csvFileName;
-	private double rate, previousData, currentData;
+	private double rate, previousData;
 
 	public GasCounter(String n) {
 //		super(n);
@@ -22,6 +22,15 @@ public class GasCounter extends Counter {
 	public String getFileName(){
 		return csvFileName;
 	}
+	
+	public void setPreviousData(double previousData) {
+		this.previousData = previousData;
+	}
+
+	public double getPreviousData() {
+		return previousData;
+	}
+
 
 	@Override
 	public String toString() {

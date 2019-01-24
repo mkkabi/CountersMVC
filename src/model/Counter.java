@@ -6,7 +6,7 @@ import java.util.Objects;
 
  public class Counter implements Serializable, Countable{
 	private String name, csvFileName;
-	private double rate, previousData, currentData;
+	private double rate, previousData;
 	
 //	public Counter(String n){
 //		this.name = n;
@@ -21,6 +21,15 @@ import java.util.Objects;
 		return this.name;
 	}
 	
+	public void setPreviousData(double previousData) {
+		this.previousData = previousData;
+	}
+
+	public double getPreviousData() {
+		return previousData;
+	}
+
+	
 
 	public void setRate(double rate) {
 		this.rate = Objects.requireNonNull(rate);
@@ -28,14 +37,6 @@ import java.util.Objects;
 	
 	public double getRate(){
 		return this.rate;
-	}
-	
-	public void setCurrentData(double data){
-		currentData = Objects.requireNonNull(data);
-	}
-	
-	public double calculate(){
-		return (currentData-previousData)*rate;
 	}
 
 	public void setFileName(String f){

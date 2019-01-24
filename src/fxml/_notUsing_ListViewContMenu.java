@@ -11,7 +11,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 
-public class ListViewContMenu extends ListView {
+public class _notUsing_ListViewContMenu extends ListView {
 
 	public <T> void initListView(ListView<T> listView, List<T> counters, Consumer c) {
 //		listView.getItems().addAll(counters);
