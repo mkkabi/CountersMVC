@@ -1,20 +1,12 @@
 package fxml;
 
-import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.TranslateTransition;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -24,25 +16,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 
 import model.DataModel;
 import model.Household;
@@ -53,8 +35,6 @@ import model.GasCounter;
 
 public class TabController<T extends Counter> extends Tab implements Initializable {
 
-	@FXML
-	private HBox tableHBox;
 	@FXML
 	private ListView countersList;
 	@FXML
@@ -71,16 +51,18 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 	TextField newCounterName, newCounterRate, currentDataTextField, previousDataTextField;
 	private TranslateTransition tabContextMenuTranslation;
 	private final Household house;
-	private ObservableList<Counter> countersObservable;
-	private ListController<Counter> countersController;
+	private ObservableList<Counter> countersObservableList;
+	private ListController<Counter> countersListController;
 	private Counter currentCounter;
+ 
+	@FXML
 	private TableView<ObservableList<String>> tableView;
 
 	TableViewDynamic tvd;
 
 	public TabController(Household h) {
 		house = h;
-		countersObservable = FXCollections.observableArrayList();
+		countersObservableList = FXCollections.observableArrayList();
 	}
 	private DataModel model;
 
@@ -95,37 +77,24 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 	public void initialize(URL location, ResourceBundle resources) {
 
 /////////////////////TABLEVIEW////////////////////////////////
-		tableView = new TableView<>();
+
 		tvd = new TableViewDynamic(tableView);
-		tableHBox.getChildren().add(tableView);
-//END TABLEVIEW////////////////////////////////
-		
+ //END TABLEVIEW////////////////////////////////
+
 		tabName.setText(house.getName());
 
-		tabContextMenuTranslation = new TranslateTransition(Duration.millis(500), contextMenu);
-		tabContextMenuTranslation.setFromX(contextMenu.getLayoutX());
-		tabContextMenuTranslation.setToX(contextMenu.getLayoutX() + contextMenu.getPrefWidth());
-		tabContextMenuTranslation.setFromY(contextMenu.getLayoutY());
-		tabContextMenuTranslation.setToY(contextMenu.getLayoutY() - contextMenu.getPrefHeight());
-
-		countersController = new ListController(countersList, house.getCounters(), model);
-		countersController.initList();
+		tabContextMenuTranslation = TranslationController.translateFromLeftBottom(contextMenu, contextMenu.getPrefWidth(), contextMenu.getPrefHeight());
+		
+  		countersListController = new ListController(countersList, house.getCounters(), model);
+		countersListController.initList();
 		application.NIO nio = new application.NIO();
-		countersController.setSelectionModel(t -> {
+		countersListController.setSelectionModel(t -> {
 			currentCounter = (Counter) t;
-			previousDataTextField.setText(currentCounter.getPreviousData()+"");
-//					setText(currentCounter.getPreviousData().toString());
-			
-			tableView.refresh();
-			tvd.createTableView2(house.getName() + "/" + currentCounter.getFileName());
- 
+			previousDataTextField.setText(currentCounter.getPreviousData() + "");
+			tvd.createTableView(house.getName() + "/" + currentCounter.getFileName());
 		});
 
-		counterTypes.getItems().addAll(
-				"Water Counter",
-				"Gas Counter",
-				"Electricity Counter"
-		);
+		counterTypes.getItems().addAll("Water Counter", "Gas Counter", "Electricity Counter");
 
 		addCounterButton.setOnMouseClicked(t -> {
 			openAddCounterPane();
@@ -142,7 +111,6 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
 			model.removeHousehold(house);
-
 			closeTab();
 			model.showInfoMessage("Household " + house.getName() + " removed");
 		}
@@ -162,10 +130,6 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 	public void openEditCounterPopUp() {
 		System.out.println(tabAnchorPane.getWidth());
 		System.out.println(tabAnchorPane.getHeight());
-
-//		addHousePopUp.setLayoutX(mainPane.getWidth() / 2 - addHousePopUp.getWidth() / 2);
-//		addHousePopUp.setLayoutY((mainPane.getHeight() / 2 - addHousePopUp.getHeight() / 2));
-//		addHousePopUp.setVisible(true);
 	}
 
 	@FXML
@@ -195,58 +159,57 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 	private void addNewCounter() {
 		// как правильно создавать класс
 		Counter counter = null;
+		if (newCounterName.getText() == null || newCounterName.getText().length() < 1) {
+			model.showInfoMessage("enter Counter name");
+			return;
+		}
+		if (newCounterRate.getText() == null || newCounterRate.getText().length() < 1) {
+			model.showInfoMessage("enter Counter rate");
+			return;
+		}
+		if (counterTypes.getSelectionModel().isEmpty()) {
+			model.showInfoMessage("select Counter Type");
+			return;
+		}
+
+		Double rate = null;
 
 		String name = Objects.requireNonNull(newCounterName.getText());
-		Double rate = Objects.requireNonNull(Double.parseDouble(newCounterRate.getText()));
+		try {
+			rate = Objects.requireNonNull(Double.parseDouble(newCounterRate.getText()));
+		} catch (Exception e) {
+			model.showInfoMessage("only number in the rate field allowed");
+		}
+
 		String counterType = Objects.requireNonNull(counterTypes.getSelectionModel().getSelectedItem().toString());
 
 		switch (counterType) {
 			case "Water Counter":
-				System.out.println("creating water counter " + name);
 				counter = new WaterCounter(name);
-//						counter.setRate(rate);
 				break;
 			case "Gas Counter":
-				System.out.println("creating Gas counter " + name);
 				counter = new GasCounter(name);
-//						counter.setRate(rate);
 				break;
 			case "Electricity Counter":
-				System.out.println("creating Electricity counter " + name);
 				counter = new ElectricityCounter(name);
-//						counter.setRate(rate);
 				break;
 			default:
 				model.showInfoMessage("Select counter type!");
 		}
 		counter.setRate(rate);
 		counter.setFileName(house.getName() + "_" + counter.getName() + ".csv");
-		System.out.println("counter name " + counter.getName() + " rate " + counter.getRate());
 		application.NIO.createCounterFile(house.getName() + "/" + counter.getFileName(), application.NIO.counterCSVHeader);
-		countersController.addNewItem(counter);
+		countersListController.addNewItem(counter);
 		closeAddCounterPane();
-		System.out.println("house counters====");
-		System.out.println(house.getCounters());
-	}
-
-	private <T extends Counter> void displaycounterDataPane(T c) {
-//		counterData.setText(c.toString());
-	}
-
-	private void deleteHousehodCounter(T t) {
-		house.getCounters().remove(t);
-		countersObservable.remove(t);
-		countersList.refresh();
-		model.saveCurrentState();
-	}
-
-	@FXML
-	private void showMessage() {
-		model.showInfoMessage("Test message from tabController");
+		model.showInfoMessage("new Counter " + counter.getName() + " " + counter.getClass());
 	}
 
 	@FXML
 	private void calculate() {
+		if (currentCounter == null) {
+			model.showInfoMessage("Select counter first!");
+			return;
+		}
 		Double current = Objects.requireNonNull(Double.parseDouble(currentDataTextField.getText()));
 		Double previous = Objects.requireNonNull(Double.parseDouble(previousDataTextField.getText()));
 		double difference = current - previous;
@@ -256,6 +219,6 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 		String dateString = format.format(new Date());
 		String textToSave = dateString + ";" + previous + ";" + current + ";" + difference + ";" + currentCounter.getRate() + ";" + result;
 		model.saveCalculation(house.getName() + "/" + currentCounter.getFileName(), textToSave);
-		tvd.createTableView2(house.getName() + "/" + currentCounter.getFileName());
+		tvd.createTableView(house.getName() + "/" + currentCounter.getFileName());
 	}
 }

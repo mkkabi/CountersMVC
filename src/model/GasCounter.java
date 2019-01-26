@@ -15,6 +15,10 @@ public class GasCounter extends Counter {
 		return this.name;
 	}
 	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public void setFileName(String f){
 		csvFileName = f;
 	}

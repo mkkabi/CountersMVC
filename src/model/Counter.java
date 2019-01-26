@@ -4,7 +4,7 @@ package model;
 import java.io.Serializable;
 import java.util.Objects;
 
- public class Counter implements Serializable, Countable{
+ public class Counter implements Serializable{
 	private String name, csvFileName;
 	private double rate, previousData;
 	

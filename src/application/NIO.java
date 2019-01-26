@@ -39,7 +39,7 @@ public class NIO {
 //			System.out.println(ex.toString());
 //		}
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File(uri)));
-				BufferedReader br = new BufferedReader(new FileReader(new File(uri)));) {
+				  BufferedReader br = new BufferedReader(new FileReader(new File(uri)));) {
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < br.read();) {
 				System.out.println(i);
@@ -72,9 +72,9 @@ public class NIO {
 		try {
 			final Path path = Paths.get(uri);
 			Files.write(path, Arrays.asList(text), StandardCharsets.UTF_8,
-					Files.exists(path) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
+					  Files.exists(path) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
 		} catch (final IOException ioe) {
-    System.out.println(ioe.toString());
+			System.out.println(ioe.toString());
 		}
 	}
 
@@ -89,10 +89,10 @@ public class NIO {
 
 	private void fileToStream(String filePath) {
 		try (Stream<String> lines = Files.lines(Paths.get(filePath),
-				Charset.defaultCharset())) {
+				  Charset.defaultCharset())) {
 
 			lines.flatMap(line -> Arrays.stream(line.split(";")))
-					.distinct().forEach(System.out::println);
+					  .distinct().forEach(System.out::println);
 		} catch (Exception e) {
 		}
 	}

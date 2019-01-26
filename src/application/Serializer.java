@@ -6,12 +6,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Set;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class Serializer<T> {
  
-	public void saveObjects(String file, Set<T> objects)  {
+	public void saveObjects(String file, ArrayList<T> objects)  {
 		try (ObjectOutputStream saver = new ObjectOutputStream(new FileOutputStream(file))) {
 			for (T t : objects) {
 				saver.writeObject(t);
@@ -32,12 +32,11 @@ public class Serializer<T> {
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	public <T> void restoreObjects(String file, Set<T> destination, Consumer consumer) throws FileNotFoundException {
+	public <T> void restoreObjects(String file, Consumer consumer) throws FileNotFoundException {
 		try(ObjectInputStream loader = new ObjectInputStream(new FileInputStream(file));){
 		while (true) {
 			T obj = (T) loader.readObject();
 			System.out.println("loaded " + obj.toString());
-			destination.add(obj);
 			consumer.accept(obj);
 		}
 		}catch(IOException | ClassNotFoundException e){System.out.println(e.toString()+" from "+this.getClass());}

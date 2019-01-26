@@ -1,36 +1,31 @@
-
 package fxml;
 
-import javafx.animation.TranslateTransition;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Screen;
-import javafx.util.Duration;
-import model.DataModel;
 
-public class InfoBox extends AnchorPane{
+public class InfoBox extends AnchorPane {
+
 	private static Label label;
-	private DataModel model; 
-	
-	
-	public InfoBox(Label label){
-		//this.getChildren().add(label);
-		this.label = label;
-	}
-	
- 
-	public void initModel(DataModel model){
-		this.model = model;
 
+	public InfoBox() {
+		label = new Label(" ");
+		this.getChildren().add(label);
+		this.setMaxWidth(350);
+		this.setPrefWidth(350);
+		this.setId("infoBox");
+		initBox();
 	}
-	
-	public void setText(String message){
+
+	private static void initBox() {
+		label.setAlignment(Pos.CENTER);
+		InfoBox.setLeftAnchor(label, 15.0);
+		InfoBox.setRightAnchor(label, 15.0);
+		
+	}
+
+	public void setText(String message) {
 		label.setText(message);
-//		dialogBoxTranslation.setRate(1);
-//		dialogBoxTranslation.play();
 	}
-	
-//	public void getLabel(){
-//		
-//	}
+
 }

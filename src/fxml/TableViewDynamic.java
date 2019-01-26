@@ -1,108 +1,61 @@
 package fxml;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javafx.application.Application;
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.*;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
+import static javafx.scene.control.TableColumn.DEFAULT_CELL_FACTORY;
+import javafx.util.Callback;
 
 public class TableViewDynamic {
 
 	TableView<ObservableList<String>> tableView;
-	
-	public TableViewDynamic(TableView<ObservableList<String>> tableView){
+
+	public TableViewDynamic(TableView<ObservableList<String>> tableView) {
 		this.tableView = tableView;
 	}
-	
-	public TableView<ObservableList<String>> getTableView(){
+
+	public TableView<ObservableList<String>> getTableView() {
 		return this.tableView;
 	}
 
-	public List<String[]> parseFileToArray(String filePath) {
-		List<String[]> list = new ArrayList();
+	private ObservableList<ObservableList<String>> buildData(String filePath) {
+		ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
 		try (Stream<String> lines = Files.lines(Paths.get(filePath), Charset.defaultCharset())) {
-
-//			 ArrayList<ArrayList<String>> listik = lines.map(t -> Arrays.asList(";").stream()
-//					.collect(Collectors.toCollection(ArrayList::new))).collect(Collectors.toCollection(ArrayList::new));
-			 
-			lines.forEach(t -> list.add(t.split(";")));
+			lines.map(t -> t.split(";")).forEach(t -> data.add(FXCollections.observableArrayList(t)));
 		} catch (Exception e) {
 			System.out.println(e.toString() + " from " + this.getClass());
 		}
-		return list;
-	}
-
-	private ObservableList<ObservableList<String>> buildData2(String filePath) {
-		ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
-		data.removeAll();
-		
-		List<String[]> list = parseFileToArray(filePath);
-		for (int i = 0; i < list.size(); i++) {
-			data.add(FXCollections.observableArrayList(list.get(i)));
-		}
 		return data;
 	}
 
-	public void createTableView2(String filePath) {
-		tableView.getColumns().clear();
-		ObservableList<ObservableList<String>> data = buildData2(filePath);
+	public void createTableView(String filePath) {
+		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		ObservableList<ObservableList<String>> data = buildData(filePath);
 		ObservableList<String> firstLine = data.remove(0);
-		
 		tableView.setItems(data);
-		for (int i = 0; i < firstLine.size(); i++) {
+
+		ObservableList<TableColumn<ObservableList<String>, ?>> columns = tableView.getColumns();
+
+		for (int i = 0; i < columns.size(); i++) {
 			final int curCol = i;
-			final TableColumn<ObservableList<String>, String> column = new TableColumn<>(
-					  firstLine.get(i)
-			);
+			final TableColumn<ObservableList<String>, String> column =(TableColumn<ObservableList<String>, String>) columns.get(i);
 			column.setCellValueFactory(p -> new ReadOnlyObjectWrapper<>(p.getValue().get(curCol)));
-			tableView.getColumns().add(column);
-			tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+			
+//			String style = (i%2==0)?"-fx-background-color: #E8E9F1":"-fx-background-color: #DBBEF1";
+//			column.setStyle(style);
+			
 		}
 
+ 
 	}
-
-	private final String[][] dataArray = {
-		{"date", "prev", "current", "amount", "rate", "pay"},
-		{"jeep", "camaro", "corvette", "asdf", "asdf", "asdf"},
-		{"accord", "camry", "mustang", "asdf", "asdf", "adsf adsf"}
-	};
-
-	private ObservableList<ObservableList<String>> buildData(String[][] dataArray) {
-		ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
-//
-//		for (String[] row : dataArray) {
-//			data.add(FXCollections.observableArrayList(row));
-//		}
-		for (int i = 1; i < dataArray.length; i++) {
-			data.add(FXCollections.observableArrayList(dataArray[i]));
-		}
-		return data;
-	}
-
-	public TableView<ObservableList<String>> createTableView() throws IOException {
-		TableView<ObservableList<String>> tableView = new TableView<>();
-		tableView.setItems(buildData(dataArray));
-		for (int i = 0; i < dataArray[0].length; i++) {
-			final int curCol = i;
-			final TableColumn<ObservableList<String>, String> column = new TableColumn<>(
-					  dataArray[0][i]
-			);
-			column.setCellValueFactory(
-					  param -> new ReadOnlyObjectWrapper<>(param.getValue().get(curCol))
-			);
-			tableView.getColumns().add(column);
-		}
-		return tableView;
-	}
-
 }

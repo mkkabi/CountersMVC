@@ -1,29 +1,26 @@
 package fxml;
 
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Callback;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import model.Counter;
 import model.DataModel;
 import model.ElectricityCounter;
 import model.GasCounter;
 import model.WaterCounter;
 
-public class ListController<T> {
+public class ListController<T extends Counter> {
 
 	private final Image IMAGE_WATER = new Image("/resources/images/water.png");
 	private final Image IMAGE_GAS = new Image("/resources/images/gas.png");
@@ -33,7 +30,6 @@ public class ListController<T> {
 	private final ListView listView;
 	private ArrayList itemsArrayList;
 	private final DataModel model;
-	private ImageView imageView;
 
 	public ListController(ListView c, ArrayList arr, DataModel dm) {
 		model = dm;
@@ -45,8 +41,16 @@ public class ListController<T> {
 	public void initList() {
 		itemsObservableList.addAll(itemsArrayList);
 		listView.setItems(itemsObservableList);
-
+ 
 		listView.setCellFactory(listView -> new ListCell<T>() {
+			private TextField textField = new TextField();
+			{
+				textField.setOnAction(e -> {commitEdit(getItem());});
+				textField.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
+					if (e.getCode() == KeyCode.ESCAPE) {cancelEdit();}
+				});
+			}
+
 			private ImageView imageView = new ImageView();
 
 			@Override
@@ -54,28 +58,31 @@ public class ListController<T> {
 				super.updateItem(item, empty);
 				imageView.setFitHeight(30.0);
 				imageView.setFitWidth(30.0);
-				ListCell<T> cell = new ListCell<>();
+
 				ContextMenu contextMenu = new ContextMenu();
 				MenuItem deleteItem = new MenuItem();
 				deleteItem.textProperty().bind(Bindings.format("Delete \"%s\"", item));
 				deleteItem.setOnAction(event -> {
 					removeItem(item);
-					System.out.println("removed from list " + item.toString());
 				});
 				contextMenu.getItems().addAll(deleteItem);
+				
 
 				if (empty) {
 					setContextMenu(null);
 					setText(null);
 					setGraphic(null);
 				} else {
-					if (item instanceof WaterCounter)
+					if (item instanceof WaterCounter) {
 						imageView.setImage(IMAGE_WATER);
-					if (item instanceof GasCounter)
+					}
+					if (item instanceof GasCounter) {
 						imageView.setImage(IMAGE_GAS);
-					if(item instanceof ElectricityCounter)
+					}
+					if (item instanceof ElectricityCounter) {
 						imageView.setImage(IMAGE_ELECTRICITY);
-					
+					}
+
 					setContextMenu(contextMenu);
 
 					imageView.setId("counterImage");
@@ -83,6 +90,32 @@ public class ListController<T> {
 					setGraphic(imageView);
 				}
 			}
+
+			@Override
+			public void startEdit() {
+				super.startEdit();
+				textField.setText(getItem().toString());
+				setText(null);
+				setGraphic(textField);				
+				textField.selectAll();
+				textField.requestFocus();
+			}
+
+			@Override
+			public void cancelEdit() {
+				super.cancelEdit();
+				setText(getItem().getName());
+				setGraphic(imageView);
+			}
+
+			@Override
+			public void commitEdit(T t) {
+				super.commitEdit(t);
+				t.setName(textField.getText());
+				setText(textField.getText());
+				setGraphic(imageView);
+			}
+
 		});
 	}
 
@@ -90,7 +123,6 @@ public class ListController<T> {
 		itemsObservableList.remove(t);
 		itemsArrayList.remove(t);
 		listView.refresh();
-		model.saveCurrentState();
 		model.showInfoMessage("removed from list " + t.toString());
 	}
 
@@ -98,7 +130,6 @@ public class ListController<T> {
 		itemsArrayList.add(t);
 		itemsObservableList.add(t);
 		listView.refresh();
-		model.saveCurrentState();
 	}
 
 	public void setSelectionModel(Consumer c) {

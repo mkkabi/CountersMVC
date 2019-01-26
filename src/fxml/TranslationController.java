@@ -3,25 +3,28 @@ package fxml;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.animation.TranslateTransition;
-import javafx.concurrent.Task;
 import javafx.scene.Node;
 import javafx.util.Duration;
 
 public class TranslationController {
 
 	private static final int MESSAGE_DURATION = 2500;
-	private static TranslateTransition tt;
 
-	public TranslationController() {
-		tt = new TranslateTransition();
+	public static TranslateTransition translateFromLeftBottom(Node node, double nodeWidth, double nodeHeight) {
+		TranslateTransition tr = new TranslateTransition(Duration.millis(500), node);
+		tr.setFromX(node.getLayoutX());
+		tr.setToX(node.getLayoutX() + nodeWidth);
+		tr.setFromY(node.getLayoutY());
+		tr.setToY(node.getLayoutY() - nodeHeight);
+		return tr;
 	}
 
-	public static void translateObjBottomUp(Node node) {
-		tt = new TranslateTransition(Duration.millis(500), node);
-		node.setLayoutX((node.getParent().getScene().getWidth() - 250) / 2);
+	public static TranslateTransition translateObjBottomUp(Node node, double nodeWidth, double nodeHeight) {
+		TranslateTransition tt = new TranslateTransition(Duration.millis(500), node);
+		node.setLayoutX((node.getParent().getScene().getWidth() - nodeWidth) / 2);
 		node.setVisible(true);
 		tt.setFromY(node.getParent().getScene().getHeight());
-		tt.setToY(node.getParent().getScene().getHeight() - (node.getParent().getScene().getHeight() / 4));
+		tt.setToY(node.getParent().getScene().getHeight() - (node.getParent().getScene().getHeight() / 4) + nodeHeight);
 		tt.setRate(1);
 		tt.play();
 
@@ -33,12 +36,12 @@ public class TranslationController {
 				timer.cancel();
 			}
 		}, MESSAGE_DURATION);
-
+		return tt;
 	}
-	
-	public static void translateObjTopDown(Node node) {
-		tt = new TranslateTransition(Duration.millis(500), node);
-		node.setLayoutX((node.getParent().getScene().getWidth() - 250) / 2);
+
+	public static TranslateTransition translateObjTopDown(Node node, double nodeWidth, double nodeHeight) {
+		TranslateTransition tt = new TranslateTransition(Duration.millis(500), node);
+		node.setLayoutX((node.getParent().getScene().getWidth() - nodeWidth) / 2);
 		node.setVisible(true);
 		tt.setFromY(0);
 		tt.setToY(node.getParent().getScene().getHeight() / 4);
@@ -53,5 +56,6 @@ public class TranslationController {
 				timer.cancel();
 			}
 		}, MESSAGE_DURATION);
+		return tt;
 	}
 }
