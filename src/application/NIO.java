@@ -23,31 +23,20 @@ import java.util.stream.Stream;
 
 public class NIO {
 
-	public static String counterCSVHeader = "date;prev;current;amount;rate;pay\n";
-
 	public void readFile(String location) throws IOException {
 		Path path = Paths.get(location);
 //		Files.createFile(path);
 		File adsf = new File("resource");
 	}
 
-	public static void createCounterFile(String uri, String text) {
-//		Path path = Paths.get(uri);
-//		try {
-//			Files.createFile(path);
-//		} catch (IOException ex) {
-//			System.out.println(ex.toString());
-//		}
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File(uri)));
-				  BufferedReader br = new BufferedReader(new FileReader(new File(uri)));) {
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < br.read();) {
-				System.out.println(i);
-			}
-			bw.write(text);
+	public static void createCounterFile(String uri) {
+		Path path = Paths.get(uri);
+		try {
+			Files.createFile(path);
 		} catch (IOException ex) {
-			System.out.println(ex.toString() + " from application.NIO");
+			System.out.println(ex.toString());
 		}
+
 	}
 
 	public static void createDir(String uri) {

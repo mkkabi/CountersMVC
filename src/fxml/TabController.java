@@ -54,7 +54,7 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 	private ObservableList<Counter> countersObservableList;
 	private ListController<Counter> countersListController;
 	private Counter currentCounter;
- 
+	TableViewCSVEditable tableCSV;
 	@FXML
 	private TableView<ObservableList<String>> tableView;
 
@@ -77,21 +77,23 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 	public void initialize(URL location, ResourceBundle resources) {
 
 /////////////////////TABLEVIEW////////////////////////////////
-
-		tvd = new TableViewDynamic(tableView);
- //END TABLEVIEW////////////////////////////////
+//		tvd = new TableViewDynamic(tableView);
+		tableCSV = new TableViewCSVEditable(tableView, model);
+		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		//END TABLEVIEW////////////////////////////////
 
 		tabName.setText(house.getName());
 
 		tabContextMenuTranslation = TranslationController.translateFromLeftBottom(contextMenu, contextMenu.getPrefWidth(), contextMenu.getPrefHeight());
-		
-  		countersListController = new ListController(countersList, house.getCounters(), model);
+
+		countersListController = new ListController(countersList, house.getCounters(), model);
 		countersListController.initList();
 		application.NIO nio = new application.NIO();
 		countersListController.setSelectionModel(t -> {
 			currentCounter = (Counter) t;
 			previousDataTextField.setText(currentCounter.getPreviousData() + "");
-			tvd.createTableView(house.getName() + "/" + currentCounter.getFileName());
+			//tvd.createTableView(house.getName() + "/" + currentCounter.getFileName());
+			tableCSV.initialize(house.getName() + "/" + currentCounter.getFileName());
 		});
 
 		counterTypes.getItems().addAll("Water Counter", "Gas Counter", "Electricity Counter");
@@ -198,10 +200,10 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 		}
 		counter.setRate(rate);
 		counter.setFileName(house.getName() + "_" + counter.getName() + ".csv");
-		application.NIO.createCounterFile(house.getName() + "/" + counter.getFileName(), application.NIO.counterCSVHeader);
+		application.NIO.createCounterFile(house.getName() + "/" + counter.getFileName());
 		countersListController.addNewItem(counter);
 		closeAddCounterPane();
-		model.showInfoMessage("new Counter " + counter.getName() + " " + counter.getClass());
+		model.showInfoMessage("new Counter " + counter.getName());
 	}
 
 	@FXML
@@ -217,8 +219,9 @@ public class TabController<T extends Counter> extends Tab implements Initializab
 		currentCounter.setPreviousData(current);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String dateString = format.format(new Date());
-		String textToSave = dateString + ";" + previous + ";" + current + ";" + difference + ";" + currentCounter.getRate() + ";" + result;
+		String textToSave = dateString + "," + previous + "," + current + "," + difference + "," + currentCounter.getRate() + "," + result;
 		model.saveCalculation(house.getName() + "/" + currentCounter.getFileName(), textToSave);
-		tvd.createTableView(house.getName() + "/" + currentCounter.getFileName());
+//		tvd.createTableView(house.getName() + "/" + currentCounter.getFileName());
+		tableCSV.initialize(house.getName() + "/" + currentCounter.getFileName());
 	}
 }

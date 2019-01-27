@@ -3,18 +3,10 @@ package fxml;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.*;
 import javafx.scene.control.*;
-import static javafx.scene.control.TableColumn.DEFAULT_CELL_FACTORY;
-import javafx.util.Callback;
 
 public class TableViewDynamic {
 
