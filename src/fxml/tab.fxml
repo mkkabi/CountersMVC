@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="tabAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="380.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="tabAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="380.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <SplitPane dividerPositions="0.3" layoutX="1.0" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
+      <SplitPane dividerPositions="0.25" layoutX="1.0" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
          <items>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="380.0" prefWidth="250.0">
                <children>
@@ -28,17 +28,17 @@
             </AnchorPane>
             <AnchorPane fx:id="counterDataPane" minHeight="0.0" minWidth="0.0" prefHeight="380.0" prefWidth="270.0">
                <children>
-                  <TextField fx:id="currentDataTextField" layoutX="15.0" layoutY="43.0" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="25.0" prefWidth="175.0" promptText="Current" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
-                  <TextField fx:id="previousDataTextField" layoutX="22.0" layoutY="101.0" maxHeight="-Infinity" prefHeight="25.0" prefWidth="175.0" promptText="Previous" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="55.0" />
-                  <Button layoutX="15.0" layoutY="138.0" maxHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#calculate" prefHeight="25.0" prefWidth="175.0" text="Calculate" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="95.0" />
+                  <TextField fx:id="currentDataTextField" layoutX="15.0" layoutY="43.0" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="25.0" prefWidth="200.0" promptText="Current" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                  <TextField fx:id="previousDataTextField" layoutX="22.0" layoutY="101.0" maxHeight="-Infinity" prefHeight="25.0" prefWidth="200.0" promptText="Previous" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="55.0" />
+                  <Button layoutX="15.0" layoutY="138.0" maxHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#calculate" prefHeight="25.0" prefWidth="200.0" text="Calculate" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="95.0" />
                   <TextArea fx:id="counterData" disable="true" layoutY="184.0" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="240.0" promptText="Choose counter for calculation history" visible="false" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="135.0" />
                   <TableView fx:id="tableView" editable="true" layoutY="138.0" prefHeight="236.0" prefWidth="488.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="135.0">
                     <columns>
-                        <TableColumn maxWidth="100.0" minWidth="91.0" prefWidth="91.0" resizable="false" text="Date" />
-                        <TableColumn maxWidth="100.0" minWidth="80.0" resizable="false" text="previous" />
-                      <TableColumn maxWidth="100.0" minWidth="80.0" resizable="false" text="current" />
-                      <TableColumn maxWidth="100.0" minWidth="80.0" resizable="false" text="amount" />
-                        <TableColumn maxWidth="100.0" minWidth="75.0" prefWidth="75.0" resizable="false" text="rate" />
+                        <TableColumn maxWidth="150.0" minWidth="120.0" prefWidth="120.0" resizable="false" text="Date" />
+                        <TableColumn maxWidth="100.0" minWidth="85.0" prefWidth="85.0" resizable="false" text="previous" />
+                      <TableColumn maxWidth="100.0" minWidth="85.0" prefWidth="85.0" resizable="false" text="current" />
+                      <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" resizable="false" text="amount" />
+                        <TableColumn maxWidth="100.0" minWidth="90.0" prefWidth="90.0" resizable="false" text="rate" />
                         <TableColumn maxWidth="100.0" minWidth="80.0" resizable="false" text="\$$" />
                     </columns>
                   </TableView>
@@ -48,7 +48,7 @@
       </SplitPane>
       <VBox fx:id="contextMenu" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="-200.0" AnchorPane.leftAnchor="-200.0">
          <children>
-            <Button fx:id="addCounterButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="218.0" text="Add Counter" textAlignment="CENTER" />
+            <Button fx:id="addCounterButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="218.0" text="addCounter" textAlignment="CENTER" />
             <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#deleteTab" prefWidth="218.0" text="Delete this House" textAlignment="CENTER">
                <VBox.margin>
                   <Insets bottom="5.0" />

@@ -24,11 +24,8 @@ public class Main extends Application {
 		root = mainDocumentLoader.load();
 		MainDocumentController mainDocumentController = mainDocumentLoader.getController();
 
-		
-		
-		InfoBox infoBox = new InfoBox( );
- 
- 
+		InfoBox infoBox = new InfoBox();
+
 		infoBox.setVisible(false);
 		root.getChildren().addAll(infoBox);
 

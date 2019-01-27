@@ -114,6 +114,7 @@ public class TableViewCSVEditable {
         });
         contextMenu.getItems().add(removerLinha);
 
+		  /*
         contextMenu.getItems().add(new SeparatorMenuItem());
 
         MenuItem inserirColuna = new MenuItem("Insert column");
@@ -135,7 +136,7 @@ public class TableViewCSVEditable {
             }
         });
         contextMenu.getItems().add(removerColuna);
-				
+			*/	
 				
 				MenuItem save = new MenuItem("Save changes");
         save.setOnAction(new EventHandler<ActionEvent>() {
@@ -336,9 +337,11 @@ public class TableViewCSVEditable {
     }
 
     private TableColumn<CSVRow, String> createColumn(int index) {
-			String[] counterCSVHeader = {"date","prev","current","amount","rate","pay"};
+			String[] counterCSVHeader = {"Date","previous","current","amount","rate","$$"};
         TableColumn<CSVRow, String> col = new TableColumn<>((counterCSVHeader[index]));
-        col.setSortable(false);
+//TableColumn<CSVRow, String> col = (TableColumn<CSVRow, String>) tableView.getColumns().get(index);        
+col.setSortable(false);
+		  
         col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<CSVRow, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<CSVRow, String> param) {
